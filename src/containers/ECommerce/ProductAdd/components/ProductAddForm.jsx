@@ -10,7 +10,7 @@ import renderSelectField from '@/shared/components/form/Select';
 import { getcategorystart } from '@/redux/actions/categoryActions';
 import { addproduct } from '@/redux/actions/itemActions';
 import renderDropZoneField from '@/shared/components/form/DropZone';
-import ReactFileReader from 'react-file-reader';
+import CKEditor from 'ckeditor4-react';
 
 const ProductAddForm = ({ handleSubmit, reset }) => {
   const dispatch = useDispatch();
@@ -22,6 +22,7 @@ let data = [];
       const [subdata, setSubdata] = useState([]);
       const [showInfo, setShowInfo] = useState("");
       const [showchildInfo, setShowchildInfo] = useState("");
+      const [descr, setDescr] = useState("");
     useEffect(() => {
       if(!done && catas.length === 0 ){
   
@@ -40,9 +41,9 @@ let data = [];
     }
   
     const onSubmit = (event) => {
-        event.preventDefault();
+        // event.preventDefault();
     
-        console.log(event);
+        // console.log(event);
       };
       
     
@@ -61,7 +62,14 @@ let data = [];
           };
         }
       };
-      const Productadder =  (data) => {
+      const onEditorChange = ( evt ) =>  {
+        setDescr(
+          evt.editor.getData()
+          )
+        }
+        const Productadder =  (data) => {
+          // const desc = data.myeditor;
+        
         const file = data.image[0];
         encodeFileBase64(file);
         const nd = fileBase64String.split(';base64,');
@@ -74,28 +82,32 @@ let data = [];
         const nd = fileBase64String.split(';base64,');
            arr2.push(nd[1])
         });
+        
         if(!imagess == '' && arr2 != []){
         const token = localStorage.getItem('token');
+       
+      
         const tosenddata = {
           'name': data.name,
           'shortname': data.shortname,
           'sku': data.sku,
           'price': data.price,
           'mainCategory': data.mainCategory.value,
-          'subCategory': data.subCategory.value,
-          'childCategory': data.childCategory.value,
+          'subCategory': (data.subCategory.value)?data.subCategory.value:'',
+          'childCategory': (data.childCategory)?data.childCategory.value:'',
           'discount': data.discount,
           'stock': parseInt(data.stock),
           'brand': data.brand,
           'image': imagess,
           'gallery': arr2,
-          'tags': data.tags
+          'tags': data.tags,
+          'description':descr
         }
         console.log(tosenddata);
         dispatch(addproduct(token, tosenddata));
         // console.log('we are here ',image1);
-        }
-      };
+      }
+    };
       const chkdchild = (data) => {
         console.log(subdata);
         console.log(data);
@@ -118,28 +130,30 @@ let data = [];
       }
      const chkchild = (data) => {
        console.log(data);
-      const reqtem = catas.filter(cata => cata._id === data);
-      const subArray = [];
-      if(reqtem[0].children.length >0){
-        setShowInfo(1)
-        const subData = reqtem[0].children;
-        setSubdata(subData);
-        subData.map(s1 => {
-          subArray.push({
-            value: s1._id, 
-            label: s1.name
+       const reqtem = catas.filter(cata => cata._id === data);
+       const subArray = [];
+       if(reqtem[0].children.length >0){
+         setShowInfo(1)
+         const subData = reqtem[0].children;
+         setSubdata(subData);
+         subData.map(s1 => {
+           subArray.push({
+             value: s1._id, 
+             label: s1.name
+            })
           })
-        })
         // console.log(subArray)
       }else{
         setShowInfo(0)
         setShowchildInfo(0)
       }
       setSubcategory(subArray)
-
-     }
+      
+    }
+  
     return (
-  <form className="form product-add" onSubmit={handleSubmit(Productadder)}>
+      
+      <form className="form product-add" onSubmit={handleSubmit(Productadder)}>
     <div className="form__half">
       <div className="form__form-group">
         <span className="form__form-group-label">Product Name</span>
@@ -235,6 +249,7 @@ let data = [];
               component={renderSelectField}
               type="text"
               options={childCategory}
+              value=""
             />
           </div>
       </div>
@@ -278,9 +293,10 @@ let data = [];
           />
         </div>
       </div>
+      
     </div>
     <div className="form__half">
-      <div className="form__form-group">
+      <div className="form__form-group" style={{height:'10%'}}>
         <span className="form__form-group-label">Image</span>
         <div className="form__form-group-field">
         <Field
@@ -290,16 +306,36 @@ let data = [];
         </div>
       </div>
    
-      <div className="form__form-group">
+      
+      
+    </div>
+    <div className="row col-md-12">
+    <div className="form__form-group">
+      <span className="form__form-group-label">Description</span>
+      <div className="col-md-12">
+      {/* write ckeditor code */}
+      <CKEditor
+    name="myeditor"
+    onChange={onEditorChange}
+/>
+      </div>
+      </div>
+    </div>
+    <div className="row col-md-12">
+    <div className="form__form-group">
         <span className="form__form-group-label">Gallery</span>
         <div className="form__form-group-field">
           <Field
             name="gallery"
             component={renderDropZoneMultipleField}
-          />
+            />
         </div>
       </div>
     </div>
+    <div>
+    
+    </div>
+    <br/>
     <ButtonToolbar className="form__button-toolbar">
       <Button color="primary" type="submit">Save</Button>
       <Button type="button" onClick={reset}>Cancel</Button>

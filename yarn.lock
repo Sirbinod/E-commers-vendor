@@ -4453,6 +4453,21 @@ cjs-module-lexer@^0.6.0:
   resolved "https://registry.yarnpkg.com/cjs-module-lexer/-/cjs-module-lexer-0.6.0.tgz#4186fcca0eae175970aee870b9fe2d6cf8d5655f"
   integrity sha512-uc2Vix1frTfnuzxxu1Hp4ktSvM3QaI4oXl4ZUqL1wjTu/BGki9TrCWoqLTg/drR1KwAEarXuRFCG2Svr1GxPFw==
 
+ckeditor4-integrations-common@^0.2.0:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/ckeditor4-integrations-common/-/ckeditor4-integrations-common-0.2.0.tgz#994a83f94e14161fa8ee15e7f0edc8735b12d8f8"
+  integrity sha512-KkHztF0bkGOnTcifWFd55j5Y9SCR3uk12SGgS6L1mZNnBeIJFCcgTwZWEHtG2aDJF7aZob7cex1CShL+SrNuow==
+  dependencies:
+    load-script "^1.0.0"
+
+ckeditor4-react@^1.4.1:
+  version "1.4.1"
+  resolved "https://registry.yarnpkg.com/ckeditor4-react/-/ckeditor4-react-1.4.1.tgz#b5d6cdbcc7fc021c6cd4de880d4db3bdecb50174"
+  integrity sha512-2CA89wcmXOEmfLS47jFRJ1xFDEqg1q5oxnwiu33vrgk0ewxf0dgxfue4uthSjNUQ6M4pNu4rtIiIXZ5kUSojnA==
+  dependencies:
+    ckeditor4-integrations-common "^0.2.0"
+    prop-types "^15.6.2"
+
 class-utils@^0.3.5:
   version "0.3.6"
   resolved "https://registry.yarnpkg.com/class-utils/-/class-utils-0.3.6.tgz#f93369ae8b9a7ce02fd41faad0ca83033190c463"
@@ -9416,6 +9431,11 @@ load-json-file@^2.0.0:
     parse-json "^2.2.0"
     pify "^2.0.0"
     strip-bom "^3.0.0"
+
+load-script@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/load-script/-/load-script-1.0.0.tgz#0491939e0bee5643ee494a7e3da3d2bac70c6ca4"
+  integrity sha1-BJGTngvuVkPuSUp+PaPSuscMbKQ=
 
 loader-runner@^2.4.0:
   version "2.4.0"
