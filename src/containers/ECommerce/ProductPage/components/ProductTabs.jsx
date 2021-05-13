@@ -41,9 +41,8 @@ const ProductTabs = (details) => {
       </Nav>
       <TabContent activeTab={activeTab} className="typography-message">
         <TabPane tabId="1">
-          {(details.details!==null)?<p>{details.details}</p>
-          :<div><h6>No details data</h6><hr/></div>
-          }
+          {(details.details!==null)?<div dangerouslySetInnerHTML={{ __html: details.details }} />
+          :<div><h6>No details data</h6><hr/></div>}
         </TabPane>
         <TabPane tabId="2">
           <h4>Delivery Option</h4>

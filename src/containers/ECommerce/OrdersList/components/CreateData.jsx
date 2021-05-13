@@ -12,7 +12,7 @@ const MoneyFormatter = ({ value }) => (
 );
 const ActionFormatter = val => (
   [
-  <Link to={`./product_page/${val}`}  className="btn btn-outline-primary btn-sm"><span class="lnr lnr-eye"></span></Link>
+  <Link to={`./orderdetails/${val}`}  className="btn btn-outline-primary btn-sm"><span class="lnr lnr-eye"></span></Link>
   ]
   );
   ActionFormatter.propTypes = {

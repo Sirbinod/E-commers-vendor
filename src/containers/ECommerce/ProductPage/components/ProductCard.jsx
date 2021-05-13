@@ -26,12 +26,15 @@ console.log(item.items)
   });
   let price2 = 0;
   // const Tags  = () => {
+    let nessItems = 'No tags assigned';
+    if(item.items.tags){
     const tagg = item.items.tags
     const tarr = tagg.split(',');
   //   // tarr.map(tarr2 => {
       
     //   // })
-    const nessItems = tarr.map(item => <badge class="badge badge-primary badge-md" style={{ marginLeft: '.5rem' }}>{item}</badge>     ); 
+    nessItems = tarr.map(item => <badge class="badge badge-primary badge-md" style={{ marginLeft: '.5rem' }}>{item}</badge>     ); 
+    }
     {item.items.discount>0?price2=(item.items.price-(item.items.price*item.items.discount)/100):price2=item.items.price}
   // }
   return (
