@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Card, CardBody, Col } from 'reactstrap';
 import ReactTableBase from '@/shared/components/table/ReactTableBase';
+import { useSelector } from 'react-redux';
 
 const OrdersListTable = ({ orderListTableData }) => {
   const tableConfig = {
@@ -13,6 +14,7 @@ const OrdersListTable = ({ orderListTableData }) => {
     manualPageSize: [10, 20, 30, 40],
     placeholder: 'Search...',
   };
+  const {done,loading} = useSelector(state=>state.orders);
 
   return (
     <Col md={12} lg={12}>
@@ -21,11 +23,11 @@ const OrdersListTable = ({ orderListTableData }) => {
           <div className="card__title">
             <h5 className="bold-text">Orders list</h5>
           </div>
-          <ReactTableBase
+          {(done===true&&loading===false)?<ReactTableBase
             columns={orderListTableData.tableHeaderData}
             data={orderListTableData.tableRowsData}
             tableConfig={tableConfig}
-          />
+          />:<div style={{ padding: "5%","margin-left":"40%"}}><h6><i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i></h6> </div> }
         </CardBody>
       </Card>
     </Col>

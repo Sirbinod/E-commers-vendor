@@ -4,6 +4,7 @@ import { Collapse } from 'reactstrap';
 import { UserProps, AuthOProps } from '@/shared/prop-types/ReducerProps';
 import { hookAuth0 } from '@/shared/components/auth/withAuth0';
 import TopbarMenuLink from './TopbarMenuLink';
+import { useSelector } from 'react-redux';
 
 const Ava = `${process.env.PUBLIC_URL}/img/ava.png`;
 
@@ -18,17 +19,28 @@ const TopbarProfile = ({ auth0, user }) => {
     localStorage.clear();
     window.location.href = '/';
 };
+let userimg='';
+let username='';
+const {id,loggedIn} = useSelector(state=>state.login);
+if(loggedIn===true){
+  userimg='https://cdn2.iconfinder.com/data/icons/various-people-avatars-solid/128/salesman_vendor_dealer_vender_marketeer_monger_business-man_broker_-512.png';
+  username='Vendor'
+
+}else{
+  window.location.href='/'
+}
+
 
   return (
     <div className="topbar__profile">
       <button className="topbar__avatar" type="button" onClick={toggleProfile}>
         <img
           className="topbar__avatar-img"
-          src={(auth0.user && auth0.user.picture) || (user && user.avatar) || Ava}
+          src={userimg}
           alt="avatar"
         />
         <p className="topbar__avatar-name">
-          { auth0.loading ? 'Loading...' : (auth0.user && auth0.user.name) || (user && user.fullName)}
+          {username}
         </p>
         <DownIcon className="topbar__icon" />
       </button>

@@ -10,6 +10,7 @@ import PropTypes from "prop-types";
 import { Alert, Button } from "reactstrap";
 import renderCheckBoxField from "../form/CheckBox";
 import { login } from "../../../redux/actions/loginActions";
+import { withTheme } from "@material-ui/core";
 
 const LogInForm = ({
   errorMessage,
@@ -20,6 +21,7 @@ const LogInForm = ({
   handleSubmit,
 }) => {
   const [showPassword, setShowPassword] = useState(false);
+  const {loggedIn, loading, error} = useSelector(state => state.login);
 
   const showPasswordToggle = () => {
     setShowPassword(!showPassword);
@@ -34,8 +36,8 @@ const LogInForm = ({
   const loginHandeler = (data) => {
     dispatch(login(data.username, data.password));
   };
-
   return (
+    
     <Form className="form login-form" onSubmit={handleSubmit(loginHandeler)}>
       <Alert color="danger" isOpen={!!errorMessage || !!errorMsg}>
         {errorMessage}
@@ -93,19 +95,29 @@ const LogInForm = ({
         </div>
       </div>
       <div className="account__btns">
-        {form === "modal_login" ? (
-          <Button className="account__btn" type="submit" color="primary">
-            Log In
-          </Button>
-        ) : (
-          <Button
+        
+          {(loggedIn===false && loading === false)?<Button
             className="account__btn btn btn-primary"
             type="submit"
             color="primary"
           >
             Log In
           </Button>
-        )}
+          :(loggedIn === true)?<Button
+          className="account__btn btn btn-primary"
+          type="submit"
+          color="primary" disabled
+        >
+         <i class="fa fa-spinner fa-pulse fa-1x fa-fw"></i> Logging in
+        </Button>
+          :<Button
+            className="account__btn btn btn-primary"
+            type="submit"
+            color="primary" disabled
+          >
+           <i class="fa fa-spinner fa-pulse fa-1x fa-fw"></i> Checking
+          </Button>}
+        
       </div>
     </Form>
   );

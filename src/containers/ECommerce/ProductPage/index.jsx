@@ -29,14 +29,8 @@ export default function ProductPage()  {
       <ProductCard items={fitem} />
   ))}
     </Row>
-    <Row>
-      <Col md={12}>
-        <h3 className="page-title page-title--not-last">Related Items</h3>
-      </Col>
-    </Row>
-    <Row>
-      <RelatedItems />
-    </Row>
+    
+   
   </Container>
   );
 };

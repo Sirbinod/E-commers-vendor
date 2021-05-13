@@ -81,11 +81,11 @@ const CreateDataProductListTable = () => {
   if(done && items.length !== 0){
       
     data = [];
-  
+    let coun = 1;
       items.map(item => {
         // console.log(item)
         data.push({
-          id: item._id,
+          id: coun.toString(),
           photo: PhotoFormatter('https://haatbazaar.herokuapp.com/'+item.image),
           name: item.name,
           category: item.mainCategory,
@@ -97,6 +97,7 @@ const CreateDataProductListTable = () => {
             (ActionFormatter(item._id)),
           ],
         });
+        coun++;
       })
     
     }

@@ -10,10 +10,11 @@ const token = localStorage.getItem('token')
 const initialState = {
     loading:false,
     loggedIn:false,
-  username: 'Abhinav',
-  id: '1',
+  username: '',
+  id: '',
   avatar: '',
-  token:""
+  token:"",
+  error:""
 };
 if(token){
   initialState.loggedIn =true;
@@ -26,7 +27,7 @@ const loginReducer = (state = initialState, action) => {
     case LOGGEDIN:
       return { loading:false,loggedIn:true,username: action.user.username, id: action.user.id, avatar: action.user.avatar };
     case LOGIN_ERROR_AUTH:
-      return { error: action.error,loading:false };
+      return { error: action.error,loading:false,loggedIn:false };
     default:
       return state;
   }

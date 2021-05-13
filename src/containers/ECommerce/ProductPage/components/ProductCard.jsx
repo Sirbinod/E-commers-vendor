@@ -1,16 +1,10 @@
 import React, { useState } from 'react';
 import {
-  Card, CardBody, Col, ButtonToolbar,
+  Card, CardBody, Col,
 } from 'reactstrap';
-import HeartIcon from 'mdi-react/HeartIcon';
-import StarIcon from 'mdi-react/StarIcon';
-import StarOutlineIcon from 'mdi-react/StarOutlineIcon';
-import { Link } from 'react-router-dom';
 import ProductGallery from './ProductGallery';
-import images from './imgs';
 import ProductTabs from './ProductTabs';
 import ColorSelect from './ColorSelect';
-import BadgeData from './BadgeTags';
 
 const ProductCard = (item) => {
   const [color, setColor] = useState('white');
@@ -37,7 +31,8 @@ console.log(item.items)
   //   // tarr.map(tarr2 => {
       
     //   // })
-     const nessItems = tarr.map(item => <badge class="badge badge-primary badge-md" style={{ marginLeft: '.5rem' }}>{item}</badge>     ); 
+    const nessItems = tarr.map(item => <badge class="badge badge-primary badge-md" style={{ marginLeft: '.5rem' }}>{item}</badge>     ); 
+    {item.items.discount>0?price2=(item.items.price-(item.items.price*item.items.discount)/100):price2=item.items.price}
   // }
   return (
     <Col md={12} lg={12}>
@@ -46,24 +41,27 @@ console.log(item.items)
           <div className="product-card">
             <ProductGallery images={imggallery} />
             <div className="product-card__info">
-              <h3 className="product-card__title">{item.items.name}</h3>
-              <div className="product-card__rate">
+              <h3 className="product-card__title">{item.items.name}</h3><h5>{item.items.shortname}</h5>
+              {/* <div className="product-card__rate">
                 <StarIcon />
                 <StarIcon />
                 <StarIcon />
                 <StarIcon />
                 <StarOutlineIcon />
                 <a className="product-card__link" href="/easydev/e-commerce/product_page">See all reviews</a>
-              </div>
-              {item.items.discount>0?price2=(item.items.price-(item.items.price*item.items.discount)/100):price2=item.items.price}
+              </div> */}
               <h1 className="product-card__price">Rs.{price2} <span className="product-card__old-price">Rs.{price2}</span></h1>
               <p className="typography-message">
-                SKU: {item.items.sku}
+                <b>SKU: </b>{(item.items.sku!==null)?item.items.sku:'No SKU data'}
               </p>
+<p>
+  <b>Tags: </b>            {nessItems}
 
-              {nessItems}
+</p>
 
-              
+<p className="typography-message">
+                <b>Stock: </b>{(item.items.stock!==null)?item.items.stock:'No Stock available'}
+              </p>    
               <form className="form product-card__form">
                 <div className="form__form-group">
                   <span className="form__form-group-label product-card__form-label">Select Color</span>
@@ -78,7 +76,7 @@ console.log(item.items)
                 </div>
                
               </form>
-              <ProductTabs details="item.items" delivery="item.delivery" />
+              <ProductTabs details={item.items.description} delivery={item.items.paymentOption} warranty={item.items.warranty} refunds={item.items.return} />
             </div>
           </div>
         </CardBody>

@@ -15,7 +15,7 @@ return {...oldState,...newState}
 const orderReducer = (state = initialState, action) => {
   switch (action.type) {
       case SORDER_START:
-      return updateobject(state, { loading:true});
+      return state
       case LOAD_NEW_ORDERS:
         if(state.done === false){
           return updateobject(state, {loading:false, orders:action.orders,done:true})

@@ -52,11 +52,11 @@ const StatusFormatter = ({ value }) => (
   if(done && orders.length !== 0){
       
     data = [];
-  
+  let coun =1;
     orders.map(order => {
         // console.log(item)
         data.push({
-          id: order._id,
+          id: coun,
           date: order.orderedDate,
           name: order.billingDetails.name,
           price: order.totalCost.toString(),
@@ -68,6 +68,7 @@ const StatusFormatter = ({ value }) => (
             (ActionFormatter(order._id)),
           ],
         });
+        coun++;
       })
     
     }

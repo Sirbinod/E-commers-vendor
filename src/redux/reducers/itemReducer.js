@@ -17,7 +17,7 @@ return {...oldState,...newState}
 const itemReducer = (state = initialState, action) => {
   switch (action.type) {
       case SITEM_START:
-      return updateobject(state, { loading:true});
+      return state;
       case LOAD_NEW_ITEMS:
         if(state.done === false){
           return updateobject(state, {loading:false, items:action.items,done:true})

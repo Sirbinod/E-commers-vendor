@@ -2,6 +2,8 @@ import React from 'react';
 import {
   ButtonToolbar, Card, CardBody, Col,
 } from 'reactstrap';
+import { useSelector } from 'react-redux';
+
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
@@ -19,6 +21,7 @@ const ProductsListTable = ({ productListTableData,data }) => {
     placeholder: 'Search...',
   };
 console.log(productListTableData.tableRowsData)
+            const {done,loading} = useSelector(state=>state.items);
   return (
     <Col md={12} lg={12}>
       <Card>
@@ -31,11 +34,11 @@ console.log(productListTableData.tableRowsData)
               </Link>
             </ButtonToolbar> */}
           </div>
-          <ReactTableBase
+          {(done===true&&loading===false)?<ReactTableBase
             columns={productListTableData.tableHeaderData}
             data={productListTableData.tableRowsData}
             tableConfig={tableConfig}
-          />
+          />:<div style={{ padding: "5%","margin-left":"40%"}}><h6><i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i></h6> </div> }
         </CardBody>
       </Card>
     </Col>
