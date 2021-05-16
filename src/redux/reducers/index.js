@@ -14,6 +14,7 @@ import { reducer as reduxFormReducer } from 'redux-form';
 import userReducer from './userReducer';
 import vendorsReducer from './vendorReducer';
 import categoryReducer from './categoryReducer';
+import dashboardReducer from './dashboardRedcer';
 
 
 
@@ -34,6 +35,7 @@ const reducer = combineReducers({
   orders: orderReducer,
   items: itemReducer,
   catas: categoryReducer,
+  dashboard: dashboardReducer,
 });
 
 export default reducer;

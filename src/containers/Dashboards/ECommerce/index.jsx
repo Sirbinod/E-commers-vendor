@@ -1,34 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { Col, Container, Row } from 'reactstrap';
-import { deleteNewOrderTableData } from '@/redux/actions/newOrderTableActions';
-import { NewOrderTableProps } from '@/shared/prop-types/TablesProps';
-import { RTLProps } from '@/shared/prop-types/ReducerProps';
 import TotalProducts from './components/TotalProducts';
-import TotalProfit from './components/TotalProfit';
 import OrdersToday from './components/OrdersToday';
-import Subscriptions from './components/Subscriptions';
-import TopSellingProducts from './components/TopSellingProducts';
-import BasicCard from './components/BasicCard';
-import SalesStatistic from './components/SalesStatistic';
-import RecentOrders from './components/RecentOrders';
-import ProductSales from './components/ProductSales';
-import NewOrders from './components/NewOrders';
-import SalesStatisticBar from './components/SalesStatisticBar';
-import MyTodos from './components/MyTodos';
-import Emails from './components/Emails';
-import SalesReport from './components/SalesReport';
-import ShortReminders from './components/ShortReminders';
-import { editTodoElement, fetchTodoListData } from '../../Todo/redux/actions';
-import todoCard from '../../Todo/types';
-
-// const onDeleteRow = (dispatch, newOrder) => (items) => {
-//   const arrayCopy = [...newOrder];
-//   arrayCopy.splice(items, 1);
-//   dispatch(deleteNewOrderTableData(arrayCopy));
-// };
+import { getdatasstart } from '../../../redux/actions/dashboardActions';
   
 
 const ECommerceDashboard = ({
@@ -41,7 +17,46 @@ const ECommerceDashboard = ({
   //     fetchTodoListDataAction();
   //   }
   // }, [fetchTodoListDataAction, todoElements.length]);
+  const dispatch = useDispatch();
+  
+  var token = localStorage.getItem('token');
+  // update this line 
+  const {done,datatoput, loading} = useSelector(state=>state.dashboard);
+   
+  useEffect(() => {
+    if(!done && datatoput.length === 0 ){
 
+      // api call  
+        dispatch(getdatasstart(token))
+    }
+   
+
+  })
+  let amt =0;
+  let pamt =0;
+  let aamt =0;
+  let samt=0;
+  let tord=0;
+  let pord=0;
+  let cord=0;
+  let dord=0;
+  let sord=0;
+  let compord=0;
+  let reford=0;
+  if (done && !loading){
+    amt=datatoput.totalProducts
+    pamt=datatoput.pendingProducts 
+    aamt=datatoput.approvedProducts
+    samt=datatoput.suspendedProducts
+    tord=datatoput.totalOrders
+    pord=datatoput.pendingOrders
+    cord=datatoput.cancelledOrders
+    dord=datatoput.declinedOrders
+    sord=datatoput.shippedOrders
+    compord=datatoput.completedOrders
+    reford=datatoput.refundedOrders
+  }
+  
   return (
     <Container className="dashboard">
       <Row>
@@ -50,10 +65,19 @@ const ECommerceDashboard = ({
         </Col>
       </Row>
       <Row>
-        {/* <TotalProducts />
-        <TotalProfit />
-        <OrdersToday />
-        <Subscriptions /> */}
+        <TotalProducts title="Total Products" amt = {amt}/>
+        <TotalProducts title="Pending Products"  amt={pamt}/>
+        <TotalProducts title="Approved Products"  amt={aamt}/>
+        <TotalProducts title="Suspended Products"  amt={samt}/>
+        {/* <TotalProfit /> */}
+        <OrdersToday title="Total Orders" amt={tord}/>
+        <OrdersToday title="Pending Orders"  amt={pord}/>
+        <OrdersToday title="Cancelled Orders"  amt={cord}/>
+        <OrdersToday title="Declined Orders"  amt={dord}/>
+        <OrdersToday title="Shipped Orders"  amt={sord}/>
+        <OrdersToday title="Completed Orders"  amt={compord}/>
+        <OrdersToday title="Refunded Orders"  amt={reford}/>
+        {/* <Subscriptions /> */}
       </Row>
       
     </Container>

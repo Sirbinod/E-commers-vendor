@@ -1,9 +1,7 @@
-import React, { useMemo, useEffect, useState } from 'react';
+import React, { useMemo, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getme, getmedeleted } from '../../../../redux/actions/itemActions';
-import { Badge } from 'reactstrap';
 import PropTypes from 'prop-types';
-import LoadingSpinner from '../../loadingSpinner';
 import { Link } from 'react-router-dom';
 // import { Alert, Button } from 'reactstrap';
 
@@ -37,7 +35,20 @@ let data = [];
 
 
 const CreateDataProductListTable = () => {
+  const CategoryFormatter = (value1, value2, value3) => {
   
+    return(
+      <div>
+        <span className="badge badge-primary" style={{'margin-left':'10px'}}>{value1}</span>
+      <span className="badge badge-secondary" style={{'margin-left':'10px'}}>{value2}</span>
+      <span className="badge badge-success" style={{'margin-left':'10px'}}>{value3}</span>
+        </div>
+  )
+  };
+  CategoryFormatter.propTypes = {
+    value: PropTypes.string||null,
+  };
+ 
   const ActionFormatter = val => (
     [
    <Link to={`./product_page/${val}`}  className="btn btn-outline-primary btn-sm"><span className="lnr lnr-eye"></span></Link>,
@@ -51,7 +62,7 @@ const CreateDataProductListTable = () => {
 
   var token = localStorage.getItem('token');
   // update this line 
-  const {done,items, loading} = useSelector(state=>state.items);
+  const {done,items} = useSelector(state=>state.items);
    
   useEffect(() => {
     if(!done && items.length === 0 ){
@@ -66,7 +77,7 @@ const CreateDataProductListTable = () => {
     e.preventDefault();
     // const idd = this.attr('id');
     const r = window.confirm("Do you really want to Delete?"); 
-    if(r == true){ 
+    if(r === true){ 
   var token = localStorage.getItem('token');
       const reqtem = items.filter(item => item._id === idd);
       const slugdata = reqtem[0].slug
@@ -83,21 +94,21 @@ const CreateDataProductListTable = () => {
     data = [];
     let coun = 1;
       items.map(item => {
-        // console.log(item)
         data.push({
           id: coun.toString(),
           photo: PhotoFormatter('https://haatbazaar.herokuapp.com/'+item.image),
           name: item.name,
-          category: item.mainCategory,
           quantity: item.viewCounts.toString(),
           article: item.sku,
           price: item.price.toString(),
-          status: StatusFormatter('1'),
+          categorymain: CategoryFormatter(item.mainCategory.name, (item.subCategory)?item.subCategory.name:null, (item.childCategory)?item.childCategory.name:null),
+          status: StatusFormatter(item.status),
           actionn: [
             (ActionFormatter(item._id)),
           ],
         });
         coun++;
+        return ''
       })
     
     }
@@ -121,11 +132,7 @@ const CreateDataProductListTable = () => {
         accessor: 'name',
         disableSortBy: true,
       },
-      {
-        Header: 'Category',
-        accessor: 'category',
-        disableSortBy: true,
-      },
+      
       {
         Header: 'Quantity',
         accessor: 'quantity',
@@ -141,6 +148,14 @@ const CreateDataProductListTable = () => {
         accessor: 'price',
       },
       {
+        Header: 'Category',
+        accessor: 'categorymain',
+        disableSortBy: true,
+        disableGlobalFilter: true,
+        formatter: CategoryFormatter,
+        width: 110,
+      },
+      {
         Header: 'Status',
         accessor: 'status',
         disableGlobalFilter: true,
@@ -153,13 +168,11 @@ const CreateDataProductListTable = () => {
         accessor: 'actionn',
         disableGlobalFilter: true,
         disableSortBy: true,
-        formatter: ActionFormatter,
         width: 110,
       }
     ], [],
   );
 
-  loading ? <LoadingSpinner /> : data=data
   const productListTableData = { tableHeaderData: columns, tableRowsData: data };
   return productListTableData;
 };

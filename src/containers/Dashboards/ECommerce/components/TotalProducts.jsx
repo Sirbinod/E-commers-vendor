@@ -19,7 +19,7 @@ const data = [
   { id: 9, name: 'Page J', uv: 1890 },
 ];
 
-const TotalProducts = () => {
+const TotalProducts = (dataa) => {
   const { t } = useTranslation('common');
   const [activeIndex, setActiveIndex] = useState(0);
   const activeItem = data[activeIndex];
@@ -34,14 +34,14 @@ const TotalProducts = () => {
       <Card>
         <CardBody className="dashboard__card-widget">
           <div className="card__title">
-            <h5 className="bold-text">{t('dashboard_commerce.total_products')}</h5>
+            <h5 className="bold-text">{dataa.title}</h5>
           </div>
           <div className="dashboard__total">
-            <TrendingUpIcon className="dashboard__trend-icon" />
+            {/* <TrendingUpIcon className="dashboard__trend-icon" /> */}
             <p className="dashboard__total-stat">
-              {activeItem.uv}
+              {dataa.amt}
             </p>
-            <div className="dashboard__chart-container">
+            {/* <div className="dashboard__chart-container">
               <ResponsiveContainer height={50}>
                 <BarChart data={data}>
                   <Bar dataKey="uv" onClick={handleClick}>
@@ -55,7 +55,7 @@ const TotalProducts = () => {
                   </Bar>
                 </BarChart>
               </ResponsiveContainer>
-            </div>
+            </div> */}
           </div>
         </CardBody>
       </Card>
