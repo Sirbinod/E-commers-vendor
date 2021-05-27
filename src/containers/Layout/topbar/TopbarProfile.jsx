@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 import DownIcon from "mdi-react/ChevronDownIcon";
 import { Collapse } from "reactstrap";
-import { UserProps, AuthOProps } from "../../../shared/prop-types/ReducerProps";
-import { hookAuth0 } from "../../../shared/components/auth/withAuth0";
 import TopbarMenuLink from "./TopbarMenuLink";
 import { useSelector } from "react-redux";
 
@@ -67,14 +65,14 @@ const TopbarProfile = ({ auth0, user }) => {
             path="/lock_screen"
             onClick={toggleProfile}
           /> */}
-          {auth0.isAuthenticated && (
+          {
             <TopbarMenuLink
               title="Log Out Auth0"
               icon="exit"
               path="/log_in"
-              onClick={auth0.logout}
+              // onClick={auth0.logout}
             />
-          )}
+          }
           <TopbarMenuLink
             title="Log Out"
             icon="exit"
@@ -87,13 +85,13 @@ const TopbarProfile = ({ auth0, user }) => {
   );
 };
 
-TopbarProfile.propTypes = {
-  user: UserProps,
-  auth0: AuthOProps.isRequired,
-};
+// TopbarProfile.propTypes = {
+//   user: UserProps,
+//   auth0: AuthOProps.isRequired,
+// };
 
 TopbarProfile.defaultProps = {
   user: {},
 };
 
-export default hookAuth0(TopbarProfile);
+export default TopbarProfile;

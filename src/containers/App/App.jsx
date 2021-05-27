@@ -8,12 +8,10 @@ import "bootstrap/dist/css/bootstrap.css";
 import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
 import "../../scss/app.scss";
 // import { LoadScript } from "../../react";
-import Auth0Provider from "../../shared/components/auth/withAuth0";
 import Router from "./Router";
 import store from "./store";
 import ScrollToTop from "./ScrollToTop";
 import { config as i18nextConfig } from "../../translations";
-import auth0Config from "../../config/auth0";
 
 i18n.init(i18nextConfig);
 
@@ -53,23 +51,23 @@ const App = () => {
 
   return (
     <Provider store={store}>
-      <Auth0Provider
+      {/* <Auth0Provider
         domain={auth0Config.domain}
         clientId={auth0Config.clientId}
         redirectUri={`${window.location.origin}`}
         returnTo={`${window.location.origin}`}
         onRedirectCallback={onRedirectCallbackAuth0}
-      >
-        <BrowserRouter basename="/travelrights">
-          <I18nextProvider i18n={i18n}>
-            <ScrollToTop>
-              <ConnectedThemeComponent>
-                <Router />
-              </ConnectedThemeComponent>
-            </ScrollToTop>
-          </I18nextProvider>
-        </BrowserRouter>
-      </Auth0Provider>
+      > */}
+      <BrowserRouter basename="/travelrights">
+        <I18nextProvider i18n={i18n}>
+          <ScrollToTop>
+            <ConnectedThemeComponent>
+              <Router />
+            </ConnectedThemeComponent>
+          </ScrollToTop>
+        </I18nextProvider>
+      </BrowserRouter>
+      {/* </Auth0Provider> */}
     </Provider>
   );
 };
