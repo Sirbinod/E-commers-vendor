@@ -1,9 +1,9 @@
-import React from 'react';
-import { ButtonToolbar } from 'reactstrap';
-import { Field, reduxForm } from 'redux-form';
-import { Link } from 'react-router-dom';
-import PropTypes from 'prop-types';
-import renderRadioButtonField from '@/shared/components/form/RadioButton';
+import React from "react";
+import { ButtonToolbar } from "reactstrap";
+import { Field, reduxForm } from "redux-form";
+import { Link } from "react-router-dom";
+import PropTypes from "prop-types";
+import renderRadioButtonField from "../../../../shared/components/form/RadioButton";
 
 const CartPurchase = ({ handleSubmit }) => (
   <form className="form cart__deliveries" onSubmit={handleSubmit}>
@@ -45,7 +45,9 @@ const CartPurchase = ({ handleSubmit }) => (
     </div>
     <h4 className="cart__total">Total Price: $348.00</h4>
     <ButtonToolbar className="form__button-toolbar">
-      <Link className="btn btn-primary" to="/e-commerce/payment">Purchase</Link>
+      <Link className="btn btn-primary" to="/e-commerce/payment">
+        Purchase
+      </Link>
     </ButtonToolbar>
   </form>
 );
@@ -55,5 +57,5 @@ CartPurchase.propTypes = {
 };
 
 export default reduxForm({
-  form: 'cart_purchase_form', // a unique identifier for this form
+  form: "cart_purchase_form", // a unique identifier for this form
 })(CartPurchase);

@@ -1,6 +1,6 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { SidebarProps } from '@/shared/prop-types/ReducerProps';
+import React from "react";
+import PropTypes from "prop-types";
+import { SidebarProps } from "../../../shared/prop-types/ReducerProps";
 
 const ToggleCollapsedMenu = ({ changeSidebarVisibility, sidebar }) => (
   <label className="toggle-btn customizer__toggle" htmlFor="collapse_toggle">

@@ -1,16 +1,13 @@
-import React from 'react';
-import {
-  ButtonToolbar, Card, CardBody, Col,
-} from 'reactstrap';
-import { useSelector } from 'react-redux';
+import React from "react";
+import { ButtonToolbar, Card, CardBody, Col } from "reactstrap";
+import { useSelector } from "react-redux";
 
-import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
+import PropTypes from "prop-types";
+import { Link } from "react-router-dom";
 
+import ReactTableBase from "../../../../shared/components/table/ReactTableBase";
 
-import ReactTableBase from '@/shared/components/table/ReactTableBase';
-
-const ProductsListTable = ({ productListTableData,data }) => {
+const ProductsListTable = ({ productListTableData, data }) => {
   const tableConfig = {
     isEditable: false,
     isSortable: true,
@@ -18,10 +15,10 @@ const ProductsListTable = ({ productListTableData,data }) => {
     withPagination: true,
     withSearchEngine: true,
     manualPageSize: [10, 20, 30, 40],
-    placeholder: 'Search...',
+    placeholder: "Search...",
   };
-console.log(productListTableData.tableRowsData)
-            const {done,loading} = useSelector(state=>state.items);
+  console.log(productListTableData.tableRowsData);
+  const { done, loading } = useSelector((state) => state.items);
   return (
     <Col md={12} lg={12}>
       <Card>
@@ -34,11 +31,19 @@ console.log(productListTableData.tableRowsData)
               </Link>
             </ButtonToolbar> */}
           </div>
-          {(done===true&&loading===false)?<ReactTableBase
-            columns={productListTableData.tableHeaderData}
-            data={productListTableData.tableRowsData}
-            tableConfig={tableConfig}
-          />:<div style={{ padding: "5%","margin-left":"40%"}}><h6><i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i></h6> </div> }
+          {done === true && loading === false ? (
+            <ReactTableBase
+              columns={productListTableData.tableHeaderData}
+              data={productListTableData.tableRowsData}
+              tableConfig={tableConfig}
+            />
+          ) : (
+            <div style={{ padding: "5%", "margin-left": "40%" }}>
+              <h6>
+                <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+              </h6>{" "}
+            </div>
+          )}
         </CardBody>
       </Card>
     </Col>
@@ -47,10 +52,12 @@ console.log(productListTableData.tableRowsData)
 
 ProductsListTable.propTypes = {
   productListTableData: PropTypes.shape({
-    tableHeaderData: PropTypes.arrayOf(PropTypes.shape({
-      key: PropTypes.any,
-      name: PropTypes.any,
-    })),
+    tableHeaderData: PropTypes.arrayOf(
+      PropTypes.shape({
+        key: PropTypes.any,
+        name: PropTypes.any,
+      })
+    ),
     tableRowsData: PropTypes.arrayOf(PropTypes.shape()),
   }),
 };

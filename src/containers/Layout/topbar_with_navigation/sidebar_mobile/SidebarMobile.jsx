@@ -1,16 +1,19 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import Scrollbar from 'react-smooth-scrollbar';
-import classNames from 'classnames';
-import { SidebarProps } from '@/shared/prop-types/ReducerProps';
-import SidebarContent from './SidebarContent';
+import React from "react";
+import PropTypes from "prop-types";
+import Scrollbar from "react-smooth-scrollbar";
+import classNames from "classnames";
+import { SidebarProps } from "../../../../shared/prop-types/ReducerProps";
+import SidebarContent from "./SidebarContent";
 
 const Sidebar = ({
-  changeToDark, changeToLight, changeMobileSidebarVisibility, sidebar,
+  changeToDark,
+  changeToLight,
+  changeMobileSidebarVisibility,
+  sidebar,
 }) => {
   const sidebarClass = classNames({
-    'sidebar sidebar--no-desktop': true,
-    'sidebar--show': sidebar.show,
+    "sidebar sidebar--no-desktop": true,
+    "sidebar--show": sidebar.show,
   });
 
   return (

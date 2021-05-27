@@ -1,8 +1,8 @@
-import React from 'react';
-import { Col } from 'reactstrap';
-import ProductItems from '@/shared/components/catalog/ProductItems';
+import React from "react";
+import { Col } from "reactstrap";
+import ProductItems from "../../../../shared/components/catalog/ProductItems";
 
-import catalogList from '../../Catalog/components/catalog_list';
+import catalogList from "../../Catalog/components/catalog_list";
 
 const RelatedItems = () => (
   <Col md={12} lg={12}>

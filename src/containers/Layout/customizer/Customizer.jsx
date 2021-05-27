@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
-import PropTypes from 'prop-types';
-import classNames from 'classnames';
-import CloseIcon from 'mdi-react/CloseIcon';
+import React, { useState } from "react";
+import PropTypes from "prop-types";
+import classNames from "classnames";
+import CloseIcon from "mdi-react/CloseIcon";
 import {
   CustomizerProps,
   SidebarProps,
@@ -9,13 +9,13 @@ import {
   RTLProps,
   RoundBordersProps,
   BlocksShadowsProps,
-} from '@/shared/prop-types/ReducerProps';
-import ToggleTheme from './ToggleTheme';
-import ToggleCollapsedMenu from './ToggleCollapsedMenu';
-import ToggleRoundBorders from './ToggleRoundBorders';
-import ToggleShadow from './ToggleShadow';
-import ToggleTopMenu from './ToggleTopMenu';
-import ToggleRTL from './ToggleRTL';
+} from "../../../shared/prop-types/ReducerProps";
+import ToggleTheme from "./ToggleTheme";
+import ToggleCollapsedMenu from "./ToggleCollapsedMenu";
+import ToggleRoundBorders from "./ToggleRoundBorders";
+import ToggleShadow from "./ToggleShadow";
+import ToggleTopMenu from "./ToggleTopMenu";
+import ToggleRTL from "./ToggleRTL";
 
 const settings = `${process.env.PUBLIC_URL}/img/settings.svg`;
 
@@ -40,7 +40,7 @@ const Customizer = ({
   const [isOpen, setIsOpen] = useState(false);
   const customizerClass = classNames({
     customizer__wrap: true,
-    'customizer__wrap--open': isOpen,
+    "customizer__wrap--open": isOpen,
   });
 
   const handleOpen = () => {
@@ -55,16 +55,31 @@ const Customizer = ({
       <div className={customizerClass} hidden={!isOpen}>
         <div className="customizer__title-wrap">
           <h5>Theme Customizer</h5>
-          <button className="customizer__close-btn" type="button" onClick={handleOpen}>
+          <button
+            className="customizer__close-btn"
+            type="button"
+            onClick={handleOpen}
+          >
             <CloseIcon />
           </button>
         </div>
-        <p className="customizer__caption">This customizer allows you to see the different variations of the EasyDev.
-          Create your own visual style for every project you do!
+        <p className="customizer__caption">
+          This customizer allows you to see the different variations of the
+          EasyDev. Create your own visual style for every project you do!
         </p>
-        <ToggleCollapsedMenu changeSidebarVisibility={changeSidebarVisibility} sidebar={sidebar} />
-        <ToggleTopMenu toggleTopNavigation={toggleTopNavigation} customizer={customizer} />
-        <ToggleTheme changeToDark={changeToDark} changeToLight={changeToLight} theme={theme} />
+        <ToggleCollapsedMenu
+          changeSidebarVisibility={changeSidebarVisibility}
+          sidebar={sidebar}
+        />
+        <ToggleTopMenu
+          toggleTopNavigation={toggleTopNavigation}
+          customizer={customizer}
+        />
+        <ToggleTheme
+          changeToDark={changeToDark}
+          changeToLight={changeToLight}
+          theme={theme}
+        />
         <ToggleRoundBorders
           changeRoundBordersOn={changeRoundBordersOn}
           changeRoundBordersOff={changeRoundBordersOff}
@@ -75,7 +90,11 @@ const Customizer = ({
           changeBlocksShadowsOff={changeBlocksShadowsOff}
           blocksShadows={blocksShadows}
         />
-        <ToggleRTL changeToRTL={changeToRTL} changeToLTR={changeToLTR} rtl={rtl} />
+        <ToggleRTL
+          changeToRTL={changeToRTL}
+          changeToLTR={changeToLTR}
+          rtl={rtl}
+        />
       </div>
     </div>
   );

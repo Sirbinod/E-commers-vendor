@@ -1,13 +1,10 @@
-import React from 'react';
-import {
-  Card, CardBody, Col,
-} from 'reactstrap';
-import PropTypes from 'prop-types';
+import React from "react";
+import { Card, CardBody, Col } from "reactstrap";
+import PropTypes from "prop-types";
 
+import ReactTableBase from "../../../../shared/components/table/ReactTableBase";
 
-import ReactTableBase from '@/shared/components/table/ReactTableBase';
-
-const VendorListTable = ({ vendorListTableData,data }) => {
+const VendorListTable = ({ vendorListTableData, data }) => {
   const tableConfig = {
     isEditable: false,
     isSortable: true,
@@ -15,9 +12,9 @@ const VendorListTable = ({ vendorListTableData,data }) => {
     withPagination: true,
     withSearchEngine: true,
     manualPageSize: [10, 20, 30, 40],
-    placeholder: 'Search...',
+    placeholder: "Search...",
   };
-console.log(vendorListTableData.tableRowsData)
+  console.log(vendorListTableData.tableRowsData);
   return (
     <Col md={12} lg={12}>
       <Card>
@@ -25,7 +22,7 @@ console.log(vendorListTableData.tableRowsData)
           <div className="card__title">
             <h5 className="bold-text">Vendors List</h5>
             {/* <ButtonToolbar className="products-list__btn-toolbar-top"> */}
-              {/* <Link className="btn btn-primary products-list__btn-add" to="/e-commerce/product_edit">Add new
+            {/* <Link className="btn btn-primary products-list__btn-add" to="/e-commerce/product_edit">Add new
                 product
               </Link> */}
             {/* </ButtonToolbar> */}
@@ -43,10 +40,12 @@ console.log(vendorListTableData.tableRowsData)
 
 VendorListTable.propTypes = {
   vendorListTableData: PropTypes.shape({
-    tableHeaderData: PropTypes.arrayOf(PropTypes.shape({
-      key: PropTypes.any,
-      name: PropTypes.any,
-    })),
+    tableHeaderData: PropTypes.arrayOf(
+      PropTypes.shape({
+        key: PropTypes.any,
+        name: PropTypes.any,
+      })
+    ),
     tableRowsData: PropTypes.arrayOf(PropTypes.shape()),
   }),
 };

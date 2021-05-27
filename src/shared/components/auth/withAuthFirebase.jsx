@@ -1,38 +1,40 @@
-import React, { useState } from 'react';
-import { withRouter } from 'react-router';
-import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
-import { auth } from '@/redux/actions/authActions';
-import ModalLoginForm from '../ModalLoginForm';
-import { AbstractProvider } from './AbstractProvider';
+import React, { useState } from "react";
+import { withRouter } from "react-router";
+import { connect } from "react-redux";
+import PropTypes from "prop-types";
+import { auth } from "../../../redux/actions/authActions";
+import ModalLoginForm from "../ModalLoginForm";
+import { AbstractProvider } from "./AbstractProvider";
 
 const withAuthFirebase = (WrappedComponent) => {
   const HocAuth = (props) => {
     const { history, auth: login } = props;
-    const [error, setError] = useState('');
+    const [error, setError] = useState("");
     const [isOpen, setIsOpen] = useState(false);
 
     const closeModal = () => {
-      setError('');
+      setError("");
       setIsOpen(false);
     };
 
     const openModal = () => {
       setIsOpen(true);
-      setError('');
+      setError("");
     };
 
-    const onLogin = (providerName = 'local') => async (userProps) => {
-      setError('');
-      try {
-        const provider = new AbstractProvider(providerName);
-        const res = await provider.login(userProps);
-        login(provider.getUserObjectByProvider(res));
-        history.push('/app_dashboard');
-      } catch (e) {
-        setError(e.message);
-      }
-    };
+    const onLogin =
+      (providerName = "local") =>
+      async (userProps) => {
+        setError("");
+        try {
+          const provider = new AbstractProvider(providerName);
+          const res = await provider.login(userProps);
+          login(provider.getUserObjectByProvider(res));
+          history.push("/app_dashboard");
+        } catch (e) {
+          setError(e.message);
+        }
+      };
 
     return (
       <div className="account">

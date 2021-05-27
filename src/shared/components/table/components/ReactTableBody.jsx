@@ -1,8 +1,8 @@
-import React, { Fragment } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { ThemeProps } from '@/shared/prop-types/ReducerProps';
-import ReactTableDnDBody from './ReactTableDnDBody';
+import React, { Fragment } from "react";
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
+import { ThemeProps } from "../../../../shared/prop-types/ReducerProps";
+import ReactTableDnDBody from "./ReactTableDnDBody";
 
 const ReactTableDefaultBody = ({ page, getTableBodyProps, prepareRow }) => (
   <tbody className="table table--bordered" {...getTableBodyProps()}>
@@ -10,8 +10,8 @@ const ReactTableDefaultBody = ({ page, getTableBodyProps, prepareRow }) => (
       prepareRow(row);
       return (
         <tr {...row.getRowProps()}>
-          {row.cells.map(cell => (
-            <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
+          {row.cells.map((cell) => (
+            <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
           ))}
         </tr>
       );
@@ -26,25 +26,29 @@ ReactTableDefaultBody.propTypes = {
 };
 
 const ReactTableBody = ({
-  page, getTableBodyProps, prepareRow, withDragAndDrop, updateDraggableData, theme,
+  page,
+  getTableBodyProps,
+  prepareRow,
+  withDragAndDrop,
+  updateDraggableData,
+  theme,
 }) => (
   <Fragment>
-    {withDragAndDrop
-      ? (
-        <ReactTableDnDBody
-          page={page}
-          getTableBodyProps={getTableBodyProps}
-          prepareRow={prepareRow}
-          updateDraggableData={updateDraggableData}
-          theme={theme}
-        />
-      ) : (
-        <ReactTableDefaultBody
-          page={page}
-          getTableBodyProps={getTableBodyProps}
-          prepareRow={prepareRow}
-        />
-      )}
+    {withDragAndDrop ? (
+      <ReactTableDnDBody
+        page={page}
+        getTableBodyProps={getTableBodyProps}
+        prepareRow={prepareRow}
+        updateDraggableData={updateDraggableData}
+        theme={theme}
+      />
+    ) : (
+      <ReactTableDefaultBody
+        page={page}
+        getTableBodyProps={getTableBodyProps}
+        prepareRow={prepareRow}
+      />
+    )}
   </Fragment>
 );
 
@@ -57,6 +61,6 @@ ReactTableBody.propTypes = {
   theme: ThemeProps.isRequired,
 };
 
-export default connect(state => ({
+export default connect((state) => ({
   theme: state.theme,
 }))(ReactTableBody);

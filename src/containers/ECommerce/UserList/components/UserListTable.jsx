@@ -1,14 +1,11 @@
-import React from 'react';
-import {
-  Card, CardBody, Col,
-} from 'reactstrap';
-import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
+import React from "react";
+import { Card, CardBody, Col } from "reactstrap";
+import PropTypes from "prop-types";
+import { Link } from "react-router-dom";
 
+import ReactTableBase from "../../../../shared/components/table/ReactTableBase";
 
-import ReactTableBase from '@/shared/components/table/ReactTableBase';
-
-const UserListTable = ({ userListTableData,data }) => {
+const UserListTable = ({ userListTableData, data }) => {
   const tableConfig = {
     isEditable: false,
     isSortable: true,
@@ -16,9 +13,9 @@ const UserListTable = ({ userListTableData,data }) => {
     withPagination: true,
     withSearchEngine: true,
     manualPageSize: [10, 20, 30, 40],
-    placeholder: 'Search...',
+    placeholder: "Search...",
   };
-console.log(userListTableData.tableRowsData)
+  console.log(userListTableData.tableRowsData);
   return (
     <Col md={12} lg={12}>
       <Card>
@@ -26,7 +23,7 @@ console.log(userListTableData.tableRowsData)
           <div className="card__title">
             <h5 className="bold-text">Users List</h5>
             {/* <ButtonToolbar className="products-list__btn-toolbar-top"> */}
-              {/* <Link className="btn btn-primary products-list__btn-add" to="/e-commerce/product_edit">Add new
+            {/* <Link className="btn btn-primary products-list__btn-add" to="/e-commerce/product_edit">Add new
                 product
               </Link> */}
             {/* </ButtonToolbar> */}
@@ -44,10 +41,12 @@ console.log(userListTableData.tableRowsData)
 
 UserListTable.propTypes = {
   userListTableData: PropTypes.shape({
-    tableHeaderData: PropTypes.arrayOf(PropTypes.shape({
-      key: PropTypes.any,
-      name: PropTypes.any,
-    })),
+    tableHeaderData: PropTypes.arrayOf(
+      PropTypes.shape({
+        key: PropTypes.any,
+        name: PropTypes.any,
+      })
+    ),
     tableRowsData: PropTypes.arrayOf(PropTypes.shape()),
   }),
 };

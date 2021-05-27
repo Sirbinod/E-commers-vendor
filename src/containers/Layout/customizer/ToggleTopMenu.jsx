@@ -1,6 +1,6 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { CustomizerProps } from '@/shared/prop-types/ReducerProps';
+import React from "react";
+import PropTypes from "prop-types";
+import { CustomizerProps } from "../../../shared/prop-types/ReducerProps";
 
 const ToggleTopMenu = ({ toggleTopNavigation, customizer }) => (
   <label className="toggle-btn customizer__toggle" htmlFor="top_menu_toggle">

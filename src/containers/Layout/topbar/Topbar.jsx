@@ -1,16 +1,18 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
-import { UserProps } from '@/shared/prop-types/ReducerProps';
-import TopbarSidebarButton from './TopbarSidebarButton';
-import TopbarProfile from './TopbarProfile';
-import TopbarMail from './TopbarMail';
-import TopbarNotification from './TopbarNotification';
-import TopbarSearch from './TopbarSearch';
-import TopbarLanguage from './TopbarLanguage';
+import React from "react";
+import PropTypes from "prop-types";
+import { Link } from "react-router-dom";
+import { UserProps } from "../../../shared/prop-types/ReducerProps";
+import TopbarSidebarButton from "./TopbarSidebarButton";
+import TopbarProfile from "./TopbarProfile";
+import TopbarMail from "./TopbarMail";
+import TopbarNotification from "./TopbarNotification";
+import TopbarSearch from "./TopbarSearch";
+import TopbarLanguage from "./TopbarLanguage";
 
 const Topbar = ({
-  changeMobileSidebarVisibility, changeSidebarVisibility, user,
+  changeMobileSidebarVisibility,
+  changeSidebarVisibility,
+  user,
 }) => (
   <div className="topbar">
     <div className="topbar__left">

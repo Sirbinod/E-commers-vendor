@@ -1,19 +1,24 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { withRouter } from 'react-router';
-import { connect } from 'react-redux';
-import { useTranslation } from 'react-i18next';
-import GoogleLogin from 'react-google-login';
-import GooglePlusIcon from 'mdi-react/GooglePlusIcon';
-import { auth, authError } from '@/redux/actions/authActions';
-import googleAuthSetting from '../../../config/google';
+import React from "react";
+import PropTypes from "prop-types";
+import { withRouter } from "react-router";
+import { connect } from "react-redux";
+import { useTranslation } from "react-i18next";
+import GoogleLogin from "react-google-login";
+import GooglePlusIcon from "mdi-react/GooglePlusIcon";
+import { auth, authError } from "../../../redux/actions/authActions";
+import googleAuthSetting from "../../../config/google";
 
 const AuthGoogleBtn = ({ dispatch, history }) => {
-  const { t } = useTranslation('errors');
+  const { t } = useTranslation("errors");
   const responseSuccess = (response) => {
-    dispatch(auth({ name: response.profileObj.name, avatar: response.profileObj.imageUrl }));
-    localStorage.setItem('easydev', response.accessToken);
-    history.push('/online_marketing_dashboard');
+    dispatch(
+      auth({
+        name: response.profileObj.name,
+        avatar: response.profileObj.imageUrl,
+      })
+    );
+    localStorage.setItem("easydev", response.accessToken);
+    history.push("/online_marketing_dashboard");
   };
 
   const responseError = (response) => {
@@ -24,7 +29,7 @@ const AuthGoogleBtn = ({ dispatch, history }) => {
   return (
     <GoogleLogin
       clientId={googleAuthSetting.client_id}
-      render={renderProps => (
+      render={(renderProps) => (
         <button
           onClick={renderProps.onClick}
           type="button"
