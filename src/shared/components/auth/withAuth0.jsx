@@ -1,6 +1,5 @@
-import React, { useState, useEffect, useContext } from 'react';
-import PropTypes from 'prop-types';
-import createAuth0Client from '@auth0/auth0-spa-js';
+import React, { useState, useEffect, useContext } from "react";
+import PropTypes from "prop-types";
 
 export const Auth0Context = React.createContext();
 export const useAuth0 = () => useContext(Auth0Context);
@@ -13,7 +12,12 @@ export function hookAuth0(WrappedComponent) {
 }
 
 const Auth0Provider = ({
-  children, onRedirectCallback, domain, clientId, redirectUri, returnTo,
+  children,
+  onRedirectCallback,
+  domain,
+  clientId,
+  redirectUri,
+  returnTo,
 }) => {
   const [isAuthenticated, setIsAuthenticated] = useState();
   const [user, setUser] = useState();
@@ -21,34 +25,34 @@ const Auth0Provider = ({
   const [loading, setLoading] = useState(true);
   const [popupOpen, setPopupOpen] = useState(false);
 
-  useEffect(() => {
-    const initAuth0 = async () => {
-      const auth0FromHook = await createAuth0Client({
-        domain,
-        client_id: clientId,
-        redirect_uri: redirectUri,
-        returnTo,
-      });
-      setAuth0(auth0FromHook);
+  // useEffect(() => {
+  // const initAuth0 = async () => {
+  //   const auth0FromHook = await createAuth0Client({
+  //     domain,
+  //     client_id: clientId,
+  //     redirect_uri: redirectUri,
+  //     returnTo,
+  //   });
+  //   setAuth0(auth0FromHook);
 
-      if (window.location.search.includes('code=')) {
-        const { appState } = await auth0FromHook.handleRedirectCallback();
-        onRedirectCallback(appState);
-      }
+  //   if (window.location.search.includes("code=")) {
+  //     const { appState } = await auth0FromHook.handleRedirectCallback();
+  //     onRedirectCallback(appState);
+  // }
 
-      const isAuth = await auth0FromHook.isAuthenticated();
+  // const isAuth = await auth0FromHook.isAuthenticated();
 
-      setIsAuthenticated(isAuth);
+  // setIsAuthenticated(isAuth);
 
-      if (isAuth) {
-        const currentUser = await auth0FromHook.getUser();
-        setUser(currentUser);
-      }
+  // if (isAuth) {
+  //   const currentUser = await auth0FromHook.getUser();
+  //   setUser(currentUser);
+  // }
 
-      setLoading(false);
-    };
-    initAuth0();
-  }, [clientId, domain, onRedirectCallback, redirectUri, returnTo]);
+  // setLoading(false);
+  // };
+  // initAuth0();
+  // }, [clientId, domain, onRedirectCallback, redirectUri, returnTo]);
 
   const loginWithPopup = async (params = {}) => {
     setPopupOpen(true);
@@ -104,7 +108,8 @@ Auth0Provider.propTypes = {
 };
 
 Auth0Provider.defaultProps = {
-  onRedirectCallback: () => window.history.replaceState({}, document.title, window.location.pathname),
+  onRedirectCallback: () =>
+    window.history.replaceState({}, document.title, window.location.pathname),
   domain: null,
   clientId: null,
   redirectUri: null,
