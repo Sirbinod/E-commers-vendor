@@ -12,6 +12,7 @@ import ResetPassword from "../../Account/ResetPassword/index";
 import ResetPasswordPhoto from "../../Account/ResetPasswordPhoto";
 import WrappedRoutes from "./WrappedRoutes";
 import { useSelector } from "react-redux";
+import ECommerceDashboard from "../../ECommerce/dashboard/dashboard";
 
 const Router = () => {
   const { loggedIn } = useSelector((state) => state.login);
