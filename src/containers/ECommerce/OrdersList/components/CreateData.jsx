@@ -21,11 +21,19 @@ MoneyFormatter.propTypes = {
   value: PropTypes.string.isRequired,
 };
 
-const StatusFormatter = ({ value }) =>
-  value === "Enabled" ? (
-    <span className="badge badge-success">Enabled</span>
+const StatusFormatter = (value) =>
+  value === 0 ? (
+    <span className="badge badge-primary">Pending</span>
+  ) : value === 1 ? (
+    <span className="badge badge-danger">Canceled</span>
+  ) : value === 2 ? (
+    <span className="badge badge-danger">Declined</span>
+  ) : value === 3 ? (
+    <span className="badge badge-success">Shipped</span>
+  ) : value === 4 ? (
+    <span className="badge badge-success">Completed</span>
   ) : (
-    <span className="badge badge-secondary">Disabled</span>
+    <span className="badge badge-warning">Refunded</span>
   );
 
 StatusFormatter.propTypes = {
@@ -39,7 +47,7 @@ const CreateDataOrderListTable = () => {
   var token = localStorage.getItem("token");
   // update this line
   const { done, orders } = useSelector((state) => state.orders);
-
+  console.log(orders);
   useEffect(() => {
     if (!done && orders.length === 0) {
       // api call

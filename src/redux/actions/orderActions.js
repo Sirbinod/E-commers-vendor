@@ -32,9 +32,14 @@ export const getorderstart = (token) => (dispatch) => {
 };
 
 export const orderDetails = (token, orderId) => {
-  return axios({
+  console.log(token);
+  var config = {
     method: "get",
-    url: `https://haatbazaar.herokuapp.com/api/v1/admin/order/${orderId}/detail`,
-    headers: { Authorization: "Bearer " + token },
-  });
+    url: "https://haatbazaar.herokuapp.com/api/v1/vendor/order/14u3elkoshpd4i/detail",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  return axios(config);
 };
