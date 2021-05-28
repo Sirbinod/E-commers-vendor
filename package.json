@@ -4,16 +4,10 @@
   "private": true,
   "homepage": "./",
   "scripts": {
-    "build:s": "react-scripts build",
-    "start:s": "react-scripts start",
-    "start": "react-app-rewired start",
-    "build": "react-app-rewired build",
+    "build": "react-scripts build",
+    "start": "react-scripts start",
     "test": "react-app-rewired test",
-    "eject": "react-app-rewired eject",
-    "docker": "cd ../ && docker-compose up",
-    "docker-build": "cd ../ && docker-compose build",
-    "docker:prod": "cd ../ && docker-compose -f docker-compose.production.yml up",
-    "docker-build:prod": "cd ../ && docker-compose -f docker-compose.production.yml build"
+    "eject": "react-app-rewired eject"
   },
   "dependencies": {
     "@amcharts/amcharts4": "^4.10.13",
@@ -86,8 +80,7 @@
   "devDependencies": {
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
-    "@testing-library/user-event": "^7.1.2",
-    "react-app-rewired": "^2.1.8"
+    "@testing-library/user-event": "^7.1.2"
   },
   "eslintConfig": {
     "extends": "react-app"

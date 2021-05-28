@@ -7,7 +7,10 @@ import PropTypes from "prop-types";
 
 const MoneyFormatter = ({ value }) => <div>${value}</div>;
 const ActionFormatter = (val) => [
-  <Link to={`./orderdetails/${val}`} className="btn btn-outline-primary btn-sm">
+  <Link
+    to={`./orderdetails?orderId=${val}`}
+    className="btn btn-outline-primary btn-sm"
+  >
     <span class="lnr lnr-eye"></span>
   </Link>,
 ];
@@ -48,10 +51,6 @@ const CreateDataOrderListTable = () => {
     data = [];
     let coun = 1;
     orders.map((order) => {
-      console.log("-=====");
-      console.log(order);
-      console.log("-=====");
-
       data.push({
         id: coun,
         date: order.orderedDate,
@@ -61,7 +60,7 @@ const CreateDataOrderListTable = () => {
         phone: order.shippingAddress.phone.toString(),
         quantity: order.totalProducts.toString(),
         status: StatusFormatter(order.status),
-        actionn: [ActionFormatter(order._id)],
+        actionn: [ActionFormatter(order.orderId)],
       });
       coun++;
     });
@@ -125,20 +124,5 @@ const CreateDataOrderListTable = () => {
   const orderListTableData = { tableHeaderData: columns, tableRowsData: data };
   return orderListTableData;
 };
-
-// const ProductList = () => {
-// const products = useSelector((state) => state);
-// console.log(products);
-
-// const fetchedProd = async () => {
-//   const res = await axios
-//   .get('https://fakestoreapi.com/products')
-//   .catch((err) => {
-//     console.log(err);
-//   });
-//   console.log(res);
-// };
-//   console.log(fetchedProd);
-// };
 
 export default CreateDataOrderListTable;

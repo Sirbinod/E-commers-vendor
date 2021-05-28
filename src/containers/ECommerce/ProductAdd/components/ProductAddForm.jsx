@@ -11,11 +11,13 @@ import { getcategorystart } from "../../../../redux/actions/categoryActions";
 import { addproduct } from "../../../../redux/actions/itemActions";
 import renderDropZoneField from "../../../../shared/components/form/DropZone";
 import CKEditor from "ckeditor4-react";
+import Input from "../../../../shared/components/form/Input";
+import validate from "./validation";
 
 const ProductAddForm = ({ handleSubmit, reset }) => {
   const dispatch = useDispatch();
   let data = [];
-  const { done, catas, loading } = useSelector((state) => state.catas);
+  const { done, catas } = useSelector((state) => state.catas);
   const [fileBase64String, setFileBase64String] = useState("");
   const [subCategory, setSubcategory] = useState([]);
   const [childCategory, setChildcategory] = useState([]);
@@ -23,6 +25,8 @@ const ProductAddForm = ({ handleSubmit, reset }) => {
   const [showInfo, setShowInfo] = useState("");
   const [showchildInfo, setShowchildInfo] = useState("");
   const [descr, setDescr] = useState("");
+  const [config, setconfig] = useState({ loading: false, error: null });
+
   useEffect(() => {
     if (!done && catas.length === 0) {
       // api call
@@ -39,11 +43,6 @@ const ProductAddForm = ({ handleSubmit, reset }) => {
     });
   }
 
-  const onSubmit = (event) => {
-    // event.preventDefault();
-    // console.log(event);
-  };
-
   const encodeFileBase64 = (file) => {
     var reader = new FileReader();
     if (file) {
@@ -59,9 +58,10 @@ const ProductAddForm = ({ handleSubmit, reset }) => {
     }
   };
   const onEditorChange = (evt) => {
+    console.log("here");
     setDescr(evt.editor.getData());
   };
-  const Productadder = (data) => {
+  const Productadder = async (data) => {
     // const desc = data.myeditor;
 
     const file = data.image[0];
@@ -96,8 +96,28 @@ const ProductAddForm = ({ handleSubmit, reset }) => {
         tags: data.tags,
         description: descr,
       };
-      console.log(tosenddata);
-      dispatch(addproduct(token, tosenddata));
+      try {
+        setconfig({
+          ...config,
+          loading: true,
+        });
+        const response = await addproduct(token, tosenddata);
+        if (response.data.status) {
+        } else {
+          setconfig({
+            ...config,
+            loading: false,
+            error: response.data.message,
+          });
+        }
+      } catch (err) {
+        setconfig({
+          ...config,
+
+          loading: false,
+          error: err.toString(),
+        });
+      }
       // console.log('we are here ',image1);
     }
   };
@@ -143,44 +163,62 @@ const ProductAddForm = ({ handleSubmit, reset }) => {
     setSubcategory(subArray);
   };
 
+  const descriptionField = ({
+    name,
+
+    onChange,
+    meta: { touched, error },
+  }) => {
+    console.log(error);
+    return (
+      <>
+        <div className="col-md-12">
+          <CKEditor name={name} onChange={onEditorChange} />
+        </div>
+
+        {touched && error && (
+          <span
+            style={{
+              marginTop: "100px",
+            }}
+            className="form__form-group-error"
+          >
+            {error}
+          </span>
+        )}
+      </>
+    );
+  };
+
   return (
     <form className="form product-add" onSubmit={handleSubmit(Productadder)}>
       <div className="form__half">
         <div className="form__form-group">
           <span className="form__form-group-label">Product Name</span>
-          <div className="form__form-group-field">
-            <Field name="name" component="input" type="text" />
-          </div>
+          <Field name={"name"} component={Input} />
         </div>
         <div className="form__form-group-id-category">
           <div className="form__form-group form__form-group-id">
             <span className="form__form-group-label">SKU</span>
-            <div className="form__form-group-field">
-              <Field name="sku" component="input" type="text" />
-            </div>
+            <Field name={"sku"} component={Input} />
           </div>
           <div className="form__form-group form__form-group-id">
             <span className="form__form-group-label">Short Name</span>
-            <div className="form__form-group-field">
-              <Field name="shortname" component="input" type="text" />
-            </div>
+            <Field name={"shortname"} component={Input} />
           </div>
         </div>
         <div className="form__form-group-price-discount">
           <div className="form__form-group form__form-group-price">
             <span className="form__form-group-label">Price</span>
-            <div className="form__form-group-field">
+            <Field name={"price"} component={Input}>
               <div className="form__form-group-icon">
                 <CurrencyUsdIcon />
               </div>
-              <Field name="price" component="input" type="text" />
-            </div>
+            </Field>
           </div>
           <div className="form__form-group">
             <span className="form__form-group-label">Brand</span>
-            <div className="form__form-group-field">
-              <Field name="brand" component="input" type="text" />
-            </div>
+            <Field name={"brand"} component={Input} />
           </div>
         </div>
         <div className="form__form-group">
@@ -206,6 +244,7 @@ const ProductAddForm = ({ handleSubmit, reset }) => {
               component={renderSelectField}
               type="text"
               options={subCategory}
+              value={descr}
               onChange={(e) => chkdchild(e.value)}
             />
           </div>
@@ -229,26 +268,29 @@ const ProductAddForm = ({ handleSubmit, reset }) => {
         <div className="form__form-group-price-discount">
           <div className="form__form-group form__form-group-price">
             <span className="form__form-group-label">Stock</span>
-            <div className="form__form-group-field">
-              <Field name="stock" component="input" type="text" />
-            </div>
+            <Field name={"stock"} component={Input} />
           </div>
           <div className="form__form-group">
             <span className="form__form-group-label">Discount</span>
-            <div className="form__form-group-field">
+            <Field
+              name={"discount"}
+              className="form__form-group-price"
+              component={Input}
+            >
               <div className="form__form-group-icon">
                 <TagIcon />
               </div>
-              <Field name="discount" component="input" type="text" />
-            </div>
+            </Field>
           </div>
         </div>
 
         <div className="form__form-group">
           <span className="form__form-group-label">Tags</span>
-          <div className="form__form-group-field">
-            <Field name="tags" component="input" type="text" />
-          </div>
+          <Field
+            name={"tags"}
+            className="form__form-group-price"
+            component={Input}
+          />
         </div>
       </div>
       <div className="form__half">
@@ -262,10 +304,13 @@ const ProductAddForm = ({ handleSubmit, reset }) => {
       <div className="row col-md-12">
         <div className="form__form-group">
           <span className="form__form-group-label">Description</span>
-          <div className="col-md-12">
-            {/* write ckeditor code */}
-            <CKEditor name="myeditor" onChange={onEditorChange} />
-          </div>
+
+          <CKEditor name="myeditor" onChange={onEditorChange} />
+          {!descr && (
+            <span className="form__form-group-error">
+              Description is required
+            </span>
+          )}
         </div>
       </div>
       <div className="row col-md-12">
@@ -278,9 +323,14 @@ const ProductAddForm = ({ handleSubmit, reset }) => {
       </div>
       <div></div>
       <br />
+      <span className="form__form-group-error">{config.error}</span>
       <ButtonToolbar className="form__button-toolbar">
-        <Button color="primary" type="submit">
-          Save
+        <Button
+          disabled={config.loading}
+          color="primary"
+          type={!descr ? "button" : "submit"}
+        >
+          {config.loading ? "Loading..." : "Save"}
         </Button>
         <Button type="button" onClick={reset}>
           Cancel
@@ -290,11 +340,7 @@ const ProductAddForm = ({ handleSubmit, reset }) => {
   );
 };
 
-ProductAddForm.propTypes = {
-  handleSubmit: PropTypes.func.isRequired,
-  reset: PropTypes.func.isRequired,
-};
-
 export default reduxForm({
   form: "product_add_form", // a unique identifier for this form
+  validate: validate,
 })(ProductAddForm);

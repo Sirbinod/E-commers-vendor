@@ -58,7 +58,7 @@ const App = () => {
         returnTo={`${window.location.origin}`}
         onRedirectCallback={onRedirectCallbackAuth0}
       > */}
-      <BrowserRouter basename="/travelrights">
+      <BrowserRouter basename="/vendor">
         <I18nextProvider i18n={i18n}>
           <ScrollToTop>
             <ConnectedThemeComponent>
