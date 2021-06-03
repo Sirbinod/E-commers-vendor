@@ -1,11 +1,11 @@
-import React, { useMemo, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { getorderstart } from "../../../../redux/actions/orderActions";
-import { Link } from "react-router-dom";
+import React, {useMemo, useEffect} from "react";
+import {useDispatch, useSelector} from "react-redux";
+import {getorderstart} from "../../../../redux/actions/orderActions";
+import {Link} from "react-router-dom";
 
 import PropTypes from "prop-types";
 
-const MoneyFormatter = ({ value }) => <div>${value}</div>;
+const MoneyFormatter = ({value}) => <div>${value}</div>;
 const ActionFormatter = (val) => [
   <Link
     to={`./orderdetails?orderId=${val}`}
@@ -46,7 +46,7 @@ const CreateDataOrderListTable = () => {
 
   var token = localStorage.getItem("token");
   // update this line
-  const { done, orders } = useSelector((state) => state.orders);
+  const {done, orders} = useSelector((state) => state.orders);
   console.log(orders);
   useEffect(() => {
     if (!done && orders.length === 0) {
@@ -129,7 +129,7 @@ const CreateDataOrderListTable = () => {
     []
   );
 
-  const orderListTableData = { tableHeaderData: columns, tableRowsData: data };
+  const orderListTableData = {tableHeaderData: columns, tableRowsData: data};
   return orderListTableData;
 };
 

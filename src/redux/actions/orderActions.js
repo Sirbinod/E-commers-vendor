@@ -21,7 +21,7 @@ export const getorderstart = (token) => (dispatch) => {
   axios({
     method: "get",
     url: "https://haatbazaar.herokuapp.com/api/v1/vendor/order/list",
-    headers: { Authorization: "Bearer " + token },
+    headers: {Authorization: "Bearer " + token},
   })
     .then(function (response) {
       dispatch(loadorder(response.data.data));

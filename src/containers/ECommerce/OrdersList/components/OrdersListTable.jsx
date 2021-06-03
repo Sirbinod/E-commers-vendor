@@ -1,10 +1,10 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { Card, CardBody, Col } from "reactstrap";
+import {Card, CardBody, Col} from "reactstrap";
 import ReactTableBase from "../../../../shared/components/table/ReactTableBase";
-import { useSelector } from "react-redux";
+import {useSelector} from "react-redux";
 
-const OrdersListTable = ({ orderListTableData }) => {
+const OrdersListTable = ({orderListTableData}) => {
   const tableConfig = {
     isEditable: false,
     isSortable: true,
@@ -14,7 +14,7 @@ const OrdersListTable = ({ orderListTableData }) => {
     manualPageSize: [10, 20, 30, 40],
     placeholder: "Search...",
   };
-  const { done, loading } = useSelector((state) => state.orders);
+  const {done, loading, orders} = useSelector((state) => state.orders);
 
   return (
     <Col md={12} lg={12}>
@@ -30,7 +30,7 @@ const OrdersListTable = ({ orderListTableData }) => {
               tableConfig={tableConfig}
             />
           ) : (
-            <div style={{ padding: "5%", "margin-left": "40%" }}>
+            <div style={{padding: "5%", "margin-left": "40%"}}>
               <h6>
                 <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
               </h6>{" "}

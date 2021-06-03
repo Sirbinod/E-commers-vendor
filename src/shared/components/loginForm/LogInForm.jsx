@@ -1,48 +1,52 @@
-import React, { useState } from "react";
-import { Field, reduxForm, Form } from "redux-form";
+import React, {useState} from "react";
+import {Field, reduxForm, Form} from "redux-form";
 // import axios from 'axios';
-import { connect, useDispatch, useSelector } from "react-redux";
+import {connect, useDispatch, useSelector} from "react-redux";
 import EyeIcon from "mdi-react/EyeIcon";
 import KeyVariantIcon from "mdi-react/KeyVariantIcon";
 import AccountOutlineIcon from "mdi-react/AccountOutlineIcon";
-import { NavLink } from "react-router-dom";
+import {NavLink} from "react-router-dom";
 import PropTypes from "prop-types";
-import { Alert, Button } from "reactstrap";
+import {Alert, Button} from "reactstrap";
 import renderCheckBoxField from "../form/CheckBox";
-import { login } from "../../../redux/actions/loginActions";
-import { withTheme } from "@material-ui/core";
+import {login, loginchk, authError} from "../../../redux/actions/loginActions";
+import {withTheme} from "@material-ui/core";
+import validate from "../validation/validation";
+import inputField from "../validation/inputField";
+import {showNotification} from "../notification/notification";
 
-const LogInForm = ({
-  errorMessage,
-  errorMsg,
-  fieldUser,
-  typeFieldUser,
-  form,
-  handleSubmit,
-}) => {
+const LogInForm = ({fieldUser, typeFieldUser, form, handleSubmit}) => {
   const [showPassword, setShowPassword] = useState(false);
-  const {loggedIn, loading, error} = useSelector(state => state.login);
+  const {loggedIn, loading, error} = useSelector((state) => state.login);
 
   const showPasswordToggle = () => {
     setShowPassword(!showPassword);
   };
-  const onSubmit = (event) => {
-    event.preventDefault();
 
-    console.log(event);
-  };
   const dispatch = useDispatch();
 
-  const loginHandeler = (data) => {
-    dispatch(login(data.username, data.password));
+  const loginHandeler = async (data) => {
+    try {
+      const res = await login(data.email, data.password);
+      if (res.data.success) {
+        var id = res.data.data._id;
+        var email = res.data.data.email;
+        showNotification("ltr", "success", "Login Successfully", "Success");
+        dispatch(loginchk(id, email, "ok"));
+        localStorage.setItem("token", res.data.token);
+        localStorage.setItem("loginsuccess", res.data.success);
+        return true;
+      } else {
+        showNotification("ltr", "danger", res.data.message, "Login Fail");
+        return false;
+      }
+    } catch (error) {}
+    dispatch(authError());
+    showNotification("ltr", "danger", error.data.message, "Login Fail");
+    return false;
   };
   return (
-    
     <Form className="form login-form" onSubmit={handleSubmit(loginHandeler)}>
-      <Alert color="danger" isOpen={!!errorMessage || !!errorMsg}>
-        {errorMessage}
-        {errorMsg}
-      </Alert>
       <div className="form__form-group">
         <span className="form__form-group-label">{fieldUser}</span>
         <div className="form__form-group-field">
@@ -50,8 +54,8 @@ const LogInForm = ({
             <AccountOutlineIcon />
           </div>
           <Field
-            name="username"
-            component="input"
+            name="email"
+            component={inputField}
             type={typeFieldUser}
             placeholder={fieldUser}
             className="input-without-border-radius"
@@ -66,7 +70,7 @@ const LogInForm = ({
           </div>
           <Field
             name="password"
-            component="input"
+            component={inputField}
             type={showPassword ? "text" : "password"}
             placeholder="Password"
             className="input-without-border-radius"
@@ -95,29 +99,33 @@ const LogInForm = ({
         </div>
       </div>
       <div className="account__btns">
-        
-          {(loggedIn===false && loading === false)?<Button
+        {loggedIn === false && loading === false ? (
+          <Button
             className="account__btn btn btn-primary"
             type="submit"
             color="primary"
           >
             Log In
           </Button>
-          :(loggedIn === true)?<Button
-          className="account__btn btn btn-primary"
-          type="submit"
-          color="primary" disabled
-        >
-         <i class="fa fa-spinner fa-pulse fa-1x fa-fw"></i> Logging in
-        </Button>
-          :<Button
+        ) : loggedIn === true ? (
+          <Button
             className="account__btn btn btn-primary"
             type="submit"
-            color="primary" disabled
+            color="primary"
+            disabled
           >
-           <i class="fa fa-spinner fa-pulse fa-1x fa-fw"></i> Checking
-          </Button>}
-        
+            <i class="fa fa-spinner fa-pulse fa-1x fa-fw"></i> Logging in
+          </Button>
+        ) : (
+          <Button
+            className="account__btn btn btn-primary"
+            type="submit"
+            color="primary"
+            disabled
+          >
+            <i class="fa fa-spinner fa-pulse fa-1x fa-fw"></i> Checking
+          </Button>
+        )}
       </div>
     </Form>
   );
@@ -139,6 +147,7 @@ LogInForm.defaultProps = {
   typeFieldUser: "text",
 };
 
-export default connect((state) => ({
-  errorMsg: state.user.error,
-}))(reduxForm()(LogInForm));
+export default reduxForm({
+  validate: validate,
+  form: "login_form",
+})(LogInForm);
