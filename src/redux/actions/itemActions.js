@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useDispatch } from "react-redux";
+import {useDispatch} from "react-redux";
 
 export const SITEM_START = "SITEM_START";
 export const LOAD_NEW_ITEMS = "LOAD_NEW_ITEMS";
@@ -44,7 +44,7 @@ export const getme = (token) => (dispatch) => {
   axios({
     method: "get",
     url: "https://haatbazaar.herokuapp.com/api/v1/vendor/product/list",
-    headers: { Authorization: "Bearer " + token },
+    headers: {Authorization: "Bearer " + token},
   })
     .then(function (response) {
       dispatch(loaditem(response.data.data));
@@ -60,7 +60,17 @@ export const addproduct = (token, tosenddata) => {
     method: "post",
     url: "https://haatbazaar.herokuapp.com/api/v1/vendor/product/create",
     data: tosenddata,
-    headers: { Authorization: "Bearer " + token },
+    headers: {Authorization: "Bearer " + token},
+  });
+};
+
+export const updateProduct = (token, data, id) => {
+  return axios({
+    method: "put",
+    url:
+      "https://haatbazaar.herokuapp.com/api/v1/vendor/product/" + id + "/edit",
+    data: data,
+    headers: {Authorization: "Bearer " + token},
   });
 };
 export const getmedeleted = (token, slug) => (dispatch) => {
@@ -71,7 +81,7 @@ export const getmedeleted = (token, slug) => (dispatch) => {
       "https://haatbazaar.herokuapp.com/api/v1/vendor/product/" +
       slug +
       "/delete",
-    headers: { Authorization: "Bearer " + token },
+    headers: {Authorization: "Bearer " + token},
   })
     .then(function (response) {
       // dispatch(loaditem(response.data.data));

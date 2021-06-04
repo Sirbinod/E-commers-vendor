@@ -1,5 +1,5 @@
 import React from "react";
-import { Route, Switch } from "react-router-dom";
+import {Route, Switch} from "react-router-dom";
 import Cart from "../../../ECommerce/Cart/index";
 import Catalog from "../../../ECommerce/Catalog/index";
 import OrdersList from "../../../ECommerce/OrdersList/index";
@@ -20,7 +20,7 @@ export default () => (
     <Route path="/e-commerce/orderdetails" component={OrderDetails} />
 
     <Route path="/e-commerce/payment" component={Payment} />
-    <Route path="/e-commerce/product_edit" component={ProductEdit} />
+    <Route path="/e-commerce/product/:id/edit" component={ProductEdit} />
     <Route path="/e-commerce/product_add" component={ProductAdd} />
     <Route path="/e-commerce/product_page/:id" component={ProductPage} />
     <Route path="/e-commerce/products_list" component={ProductsList} />

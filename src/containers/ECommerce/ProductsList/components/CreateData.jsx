@@ -55,6 +55,13 @@ const CreateDataProductListTable = () => {
     >
       <span className="lnr lnr-eye"></span>
     </Link>,
+    <Link
+      to={`./product/${val}/edit`}
+      className="btn btn-outline-primary btn-sm"
+    >
+      {" "}
+      <span className="lnr lnr-pencil"></span>
+    </Link>,
     <button
       id={val}
       className="btn btn-outline-danger btn-sm"
@@ -105,7 +112,7 @@ const CreateDataProductListTable = () => {
         article: item.sku,
         price: item.price.toString(),
         categorymain: CategoryFormatter(
-          item.mainCategory.name,
+          item.mainCategory ? item.mainCategory.name : null,
           item.subCategory ? item.subCategory.name : null,
           item.childCategory ? item.childCategory.name : null
         ),

@@ -32,7 +32,7 @@
     top: 0;
 
     @include directify($directions) {
-      transform: #{directed('translate')};
+      transform: #{directed("translate")};
     }
 
     @include directify($directions) {
@@ -62,7 +62,10 @@
     }
   }
 
-  &:hover, &:focus, &:active, &:active:focus {
+  &:hover,
+  &:focus,
+  &:active,
+  &:active:focus {
     outline: none;
     box-shadow: none !important;
 
@@ -72,8 +75,9 @@
     }
   }
 
-  &:focus, &:active, &:active:focus {
-
+  &:focus,
+  &:active,
+  &:active:focus {
     &:before {
       transition: all 0s;
     }
@@ -91,22 +95,20 @@
     padding: 10px 15px;
 
     &:hover {
-
       p {
         @include themify($themes) {
-          color: themed('colorText');
+          color: themed("colorText");
         }
       }
 
       svg {
         @include themify($themes) {
-          fill: themed('colorText');
+          fill: themed("colorText");
         }
       }
     }
 
     &.icon--right {
-
       svg {
         margin-top: 2px;
         margin-bottom: 0;
@@ -138,12 +140,16 @@
       background-color: darken($color-light-gray, 10%);
     }
 
-    &:hover, &:focus, &:active, &:active:focus {
+    &:hover,
+    &:focus,
+    &:active,
+    &:active:focus {
       border-color: darken($color-light-gray, 10%);
       color: $color-gray;
     }
 
-    &:not([disabled]):not(.disabled):active, &:not([disabled]):not(.disabled).active {
+    &:not([disabled]):not(.disabled):active,
+    &:not([disabled]):not(.disabled).active {
       background-color: $color-dusty-white;
       border-color: $color-dusty-white;
     }
@@ -152,17 +158,16 @@
   &.btn-outline-secondary {
     border-color: $color-light-gray;
 
-    &, p {
-
+    &,
+    p {
       @include themify($themes) {
-        color: themed('colorText');
+        color: themed("colorText");
       }
     }
 
     svg {
-
       @include themify($themes) {
-        fill: themed('colorText');
+        fill: themed("colorText");
       }
     }
 
@@ -170,7 +175,10 @@
       background-color: $color-light-gray;
     }
 
-    &:hover, &:focus, &:active, &:active:focus {
+    &:hover,
+    &:focus,
+    &:active,
+    &:active:focus {
       background: transparent;
       border-color: $color-light-gray;
       color: $color-gray;
@@ -193,7 +201,10 @@
       background-color: $color-blue-hover;
     }
 
-    &:hover, &:focus, &:active, &:active:focus {
+    &:hover,
+    &:focus,
+    &:active,
+    &:active:focus {
       border-color: $color-blue-hover;
     }
   }
@@ -223,7 +234,10 @@
       background-color: $color-accent-hover;
     }
 
-    &:hover, &:focus, &:active, &:active:focus {
+    &:hover,
+    &:focus,
+    &:active,
+    &:active:focus {
       border-color: $color-accent-hover;
     }
   }
@@ -254,7 +268,10 @@
       background-color: $color-yellow-hover;
     }
 
-    &:hover, &:focus, &:active, &:active:focus {
+    &:hover,
+    &:focus,
+    &:active,
+    &:active:focus {
       border-color: $color-yellow-hover;
     }
   }
@@ -284,7 +301,10 @@
       background-color: $color-red-hover;
     }
 
-    &:hover, &:focus, &:active, &:active:focus {
+    &:hover,
+    &:focus,
+    &:active,
+    &:active:focus {
       border-color: $color-red-hover;
     }
   }
@@ -306,10 +326,19 @@
     }
   }
 
-  &, &.btn-primary, &.btn-danger, &.btn-warning, &.btn-success, &.btn-outline-secondary, &.btn-secondary,
-  &.btn-outline-primary, &.btn-outline-danger, &.btn-outline-warning, &.btn-outline-success,
-  &.icon, &.icon.btn-secondary {
-
+  &,
+  &.btn-primary,
+  &.btn-danger,
+  &.btn-warning,
+  &.btn-success,
+  &.btn-outline-secondary,
+  &.btn-secondary,
+  &.btn-outline-primary,
+  &.btn-outline-danger,
+  &.btn-outline-warning,
+  &.btn-outline-success,
+  &.icon,
+  &.icon.btn-secondary {
     &.disabled {
       background-color: $color-background-body;
       border-color: $color-background-body;
@@ -323,12 +352,13 @@
       svg {
         fill: $color-dusty-white;
       }
-
     }
   }
 
-  &.btn-primary, &.btn-danger, &.btn-warning, &.btn-success {
-
+  &.btn-primary,
+  &.btn-danger,
+  &.btn-warning,
+  &.btn-success {
     p {
       color: $color-white;
     }
@@ -338,20 +368,31 @@
     }
   }
 
-  &.btn-outline-primary, &.btn-outline-danger, &.btn-outline-warning, &.btn-outline-success {
-
-    &:hover, &:focus, &:active, &:active:focus {
+  &.btn-outline-primary,
+  &.btn-outline-danger,
+  &.btn-outline-warning,
+  &.btn-outline-success {
+    &:hover,
+    &:focus,
+    &:active,
+    &:active:focus {
       color: $color-white;
       background: transparent;
     }
   }
 
-  &.btn-primary, &.btn-danger, &.btn-warning, &.btn-success,
-  &.btn-outline-primary, &.btn-outline-danger, &.btn-outline-warning, &.btn-outline-success {
-
-    &:hover, &:focus,
-    &:active, &:active:focus {
-
+  &.btn-primary,
+  &.btn-danger,
+  &.btn-warning,
+  &.btn-success,
+  &.btn-outline-primary,
+  &.btn-outline-danger,
+  &.btn-outline-warning,
+  &.btn-outline-success {
+    &:hover,
+    &:focus,
+    &:active,
+    &:active:focus {
       p {
         color: $color-white;
       }
@@ -360,20 +401,16 @@
         fill: $color-white;
       }
     }
-
   }
 
   &.expand {
-
     svg {
       width: 0;
       transition: all 0.3s;
     }
 
     &.expand--load {
-
       @keyframes rotating {
-
         from {
           transform: rotate(0deg);
         }
@@ -414,7 +451,6 @@
   }
 
   &.btn-toolbar--center {
-
     & > * {
       margin-right: auto;
       margin-left: auto;
@@ -446,7 +482,6 @@
   }
 
   &.btn-group--icons {
-
     .btn {
       padding: 7px 8px;
       line-height: 14px;
@@ -458,16 +493,18 @@
   }
 }
 
-button:focus, button:active {
+button:focus,
+button:active {
   outline: none;
 }
 
 .open > .dropdown-toggle.btn-default,
-.btn-default:active:focus, .btn-default:active:focus,
-.btn-default.focus, .btn-default:focus {
-
+.btn-default:active:focus,
+.btn-default:active:focus,
+.btn-default.focus,
+.btn-default:focus {
   @include themify($themes) {
-    background-color: themed('colorBackground');
+    background-color: themed("colorBackground");
   }
 }
 
@@ -481,16 +518,14 @@ button:focus, button:active {
   }
 
   .customizer__toggle {
-
     span {
-
       @include directify($directions) {
         #{directed('margin-right')}: 10px;
         #{directed('margin-left')}: 0px;
       }
 
       @include themify($themes) {
-        color: themed('colorText');
+        color: themed("colorText");
       }
     }
   }

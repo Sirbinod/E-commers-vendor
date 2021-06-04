@@ -13,14 +13,13 @@
   }
 
   &::-webkit-scrollbar-thumb {
-
     @include themify($themes) {
-      background-color: themed('colorScrollbar');
+      background-color: themed("colorScrollbar");
     }
   }
 
   @include directify($directions) {
-    text-align: directed('left');
+    text-align: directed("left");
   }
 
   &:last-child {
@@ -48,23 +47,24 @@
     }
 
     @include themify($themes) {
-      color: themed('colorText');
-      border-bottom-color: themed('colorBorder');
-      background: themed('colorBackground');
+      color: themed("colorText");
+      border-bottom-color: themed("colorBorder");
+      background: themed("colorBackground");
     }
   }
 
-  tbody td, th {
+  tbody td,
+  th {
     border: none;
     padding: 10px 0 10px 0;
 
     @include themify($themes) {
-      color: themed('colorTextAdditional');
+      color: themed("colorTextAdditional");
     }
   }
 
-  th, td {
-
+  th,
+  td {
     &:first-child {
       padding-left: 10px;
     }
@@ -82,13 +82,13 @@
     min-height: 45px;
     min-width: 100px;
     padding: 10px 0 10px 0;
-    font-family: 'Roboto', sans-serif;
+    font-family: "Roboto", sans-serif;
     color: $color-text;
     font-weight: 700;
 
     &:first-child {
       min-width: 45px;
-      white-space: nowrap
+      white-space: nowrap;
     }
   }
 
@@ -101,15 +101,13 @@
   }
 
   &.table--bordered {
-
     @include directify($directions) {
-      text-align: directed('left');
+      text-align: directed("left");
     }
 
     tr {
-
       @include themify($themes) {
-        border-bottom: 1px solid themed('colorBorder');
+        border-bottom: 1px solid themed("colorBorder");
       }
 
       &:last-child {
@@ -119,12 +117,10 @@
   }
 
   &.table--head-accent {
-
     thead {
-
       @include themify($themes) {
-        color: themed('colorTextAdditional');
-        background-color: themed('colorHover');
+        color: themed("colorTextAdditional");
+        background-color: themed("colorHover");
       }
 
       th {
@@ -134,36 +130,32 @@
   }
 
   &.table-striped {
-
     tbody tr:nth-of-type(odd) {
-
       @include themify($themes) {
-        background-color: themed('colorHover');
+        background-color: themed("colorHover");
       }
     }
   }
 
   &.table-hover {
-
     tbody tr {
       transition: all 0.3s;
       cursor: pointer;
 
       &:hover {
-
         @include themify($themes) {
-          background-color: themed('colorBackgroundBody');
+          background-color: themed("colorBackgroundBody");
         }
       }
     }
   }
 
   .react-table {
-
     thead tr {
       position: sticky;
       top: 0;
       background: white;
+      z-index: 1;
     }
   }
 
@@ -172,7 +164,7 @@
     flex-wrap: wrap;
     align-content: center;
 
-    &:first-child{
+    &:first-child {
       margin-right: 10px;
     }
 
@@ -191,7 +183,6 @@
   }
 
   .resizable-table {
-
     thead {
       min-width: 100px;
       overflow-y: auto;
@@ -222,16 +213,15 @@
         width: 4px;
         height: 70%;
         position: absolute;
-        touch-action :none;
+        touch-action: none;
 
         @include themify($themes) {
-          background: themed('colorBorder');
+          background: themed("colorBorder");
         }
 
         &.isResizing {
-
           @include themify($themes) {
-            background: themed('colorHeaderDataPicker');
+            background: themed("colorHeaderDataPicker");
           }
         }
       }
@@ -294,12 +284,12 @@
       border-radius: 0;
       background: transparent;
       font-size: 13px;
-      font-family: 'Roboto', sans-serif;
+      font-family: "Roboto", sans-serif;
       padding-left: 0;
 
       @include themify($themes) {
-        background-color: themed('colorBackground');
-        color: themed('colorTextAdditional');
+        background-color: themed("colorBackground");
+        color: themed("colorTextAdditional");
       }
 
       &:active {
@@ -309,7 +299,6 @@
     }
 
     .form-control {
-
       &:focus {
         box-shadow: none;
       }
@@ -340,8 +329,8 @@
     margin-right: 20px;
 
     @include themify($themes) {
-      color: themed('colorText');
-      background: themed('colorBackground');
+      color: themed("colorText");
+      background: themed("colorBackground");
     }
   }
 }
@@ -357,12 +346,11 @@
   }
 
   @include themify($themes) {
-    background: themed('colorBackground');
+    background: themed("colorBackground");
   }
 }
 
 .react-table__highlighter {
-
   mark {
     background-color: $color-accent;
     padding: 0;
@@ -377,7 +365,7 @@
   }
 
   @include themify($themes) {
-    border-bottom: 1px solid themed('colorBorder');
+    border-bottom: 1px solid themed("colorBorder");
   }
 }
 
@@ -385,7 +373,7 @@
   padding: 10px 20px 25px 20px;
 
   @include themify($themes) {
-    border-bottom: 1px solid themed('colorBorder');
+    border-bottom: 1px solid themed("colorBorder");
   }
 }
 
@@ -415,12 +403,12 @@
     width: 18px;
 
     @include themify($themes) {
-      fill: themed('colorIcon');
+      fill: themed("colorIcon");
     }
   }
 
   @include themify($themes) {
-    color: themed('colorText');
+    color: themed("colorText");
   }
 
   @media screen and (max-width: 640px) {
@@ -428,7 +416,6 @@
   }
 
   @keyframes beforePulse {
-
     from {
       width: 7px;
       height: 7px;
