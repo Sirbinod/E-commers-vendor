@@ -86,7 +86,7 @@ const ProductAddForm = ({ handleSubmit, reset }) => {
         sku: data.sku,
         price: data.price,
         mainCategory: data.mainCategory.value,
-        subCategory: data.subCategory.value ? data.subCategory.value : "",
+        subCategory: data.subCategory ? data.subCategory.value : "",
         childCategory: data.childCategory ? data.childCategory.value : "",
         discount: data.discount,
         stock: parseInt(data.stock),

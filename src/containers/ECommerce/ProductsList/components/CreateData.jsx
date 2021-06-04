@@ -1,8 +1,8 @@
-import React, {useMemo, useEffect} from "react";
-import {useDispatch, useSelector} from "react-redux";
-import {getme, getmedeleted} from "../../../../redux/actions/itemActions";
+import React, { useMemo, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { getme, getmedeleted } from "../../../../redux/actions/itemActions";
 import PropTypes from "prop-types";
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 // import { Alert, Button } from 'reactstrap';
 
 const PhotoFormatter = (value) => (
@@ -12,9 +12,9 @@ const PhotoFormatter = (value) => (
 );
 
 const StatusFormatter = (value) =>
-  value === "1" ? (
+  value === 1 ? (
     <span className="badge badge-secondary">Pending</span>
-  ) : value === "2" ? (
+  ) : value === 2 ? (
     <span className="badge badge-success">Approved</span>
   ) : (
     <span className="badge badge-warning">Suspended</span>
@@ -32,13 +32,16 @@ const CreateDataProductListTable = () => {
   const CategoryFormatter = (value1, value2, value3) => {
     return (
       <div>
-        <span className="badge badge-primary" style={{"margin-left": "10px"}}>
+        <span className="badge badge-primary" style={{ "margin-left": "10px" }}>
           {value1}
         </span>
-        <span className="badge badge-secondary" style={{"margin-left": "10px"}}>
+        <span
+          className="badge badge-secondary"
+          style={{ "margin-left": "10px" }}
+        >
           {value2}
         </span>
-        <span className="badge badge-success" style={{"margin-left": "10px"}}>
+        <span className="badge badge-success" style={{ "margin-left": "10px" }}>
           {value3}
         </span>
       </div>
@@ -70,7 +73,7 @@ const CreateDataProductListTable = () => {
 
   var token = localStorage.getItem("token");
   // update this line
-  const {done, items} = useSelector((state) => state.items);
+  const { done, items } = useSelector((state) => state.items);
 
   useEffect(() => {
     if (!done && items.length === 0) {
@@ -93,7 +96,7 @@ const CreateDataProductListTable = () => {
       alert("Cancelled");
     }
   };
-  if (done && items.length !== 0) {
+  if (done) {
     data = [];
     let coun = 1;
     items.map((item) => {
@@ -101,7 +104,7 @@ const CreateDataProductListTable = () => {
         id: coun.toString(),
         photo: PhotoFormatter("https://haatbazaar.herokuapp.com/" + item.image),
         name: item.name,
-        quantity: item.viewCounts.toString(),
+        quantity: item.stock.toString(),
         article: item.sku,
         price: item.price.toString(),
         categorymain: CategoryFormatter(
