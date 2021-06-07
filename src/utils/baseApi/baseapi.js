@@ -1,4 +1,4 @@
-export const baseurl = "https://api.cloudpasal.com";
+export const baseurl = "https://haatbazaar.herokuapp.com";
 
 export const baseapi = `${baseurl}/api/v1/vendor`;
 
@@ -18,7 +18,7 @@ export const orderlistapi = `${baseapi}/order/list`;
 
 export const orderdetailapi = `${baseapi}/order/14u3elkoshpd4i/detail`;
 
-export const baseadmin = "https://api.cloudpasal.com    /api/v1/admin";
+export const baseadmin = "https://haatbazaar.herokuapp.com/api/v1/admin";
 
 export const userlistapi = `${baseadmin}/user/list`;
 

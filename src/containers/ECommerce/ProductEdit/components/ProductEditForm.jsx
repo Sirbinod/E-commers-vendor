@@ -16,7 +16,7 @@ let ProductEditForm = ({}) => {
   const onDrop = useCallback((acceptedFiles) => {
     // Do something with the files
   }, []);
-  const {getRootProps, getInputProps, isDragActive} = useDropzone({onDrop});
+  const {getRootProps, getInputProps, acceptedFiles} = useDropzone({onDrop});
 
   const {done, catas} = useSelector((state) => state.catas);
   const [fileBase64String, setFileBase64String] = useState("");
@@ -48,6 +48,17 @@ let ProductEditForm = ({}) => {
     description: filteredProduct.description,
     gallery: filteredProduct.gallery,
   });
+  console.log("product ma k xsss", product);
+  const files = acceptedFiles.map((file) => (
+    <li key={file.path}>
+      {file.path} - {file.size} bytes
+    </li>
+  ));
+
+  const removeFile = (index, e) => {
+    e.preventDefault();
+    value.filter((val, i) => i !== index);
+  };
 
   let name, value;
   const handelInput = (e) => {
@@ -78,10 +89,12 @@ let ProductEditForm = ({}) => {
       };
     }
   };
-  const onEditorChange = (evt) => {
-    setDescr(evt.editor.getData());
-  };
+  // const onEditorChange = (evt) => {
+  //   setDescr(evt.editor.getData());
+  //   setProduct(...product, descr);
+  // };
   const updateData = async (e) => {
+    console.log("what the fuck");
     const file = product.image[0];
     encodeFileBase64(file);
     const nd = fileBase64String.split(";base64,");
@@ -111,14 +124,16 @@ let ProductEditForm = ({}) => {
         image: imagess,
         gallery: arr2,
         tags: product.tags,
-        description: descr,
+        description: product.description,
         publish: false,
       };
+      console.log("k xa data:", data);
       try {
         const token = localStorage.getItem("token");
-        const req = await updateProduct(token, data);
+        const req = await updateProduct(token, data, id);
         if (req.success == true) {
           dispatch(updateProduct(req.data.data));
+          console.log(req.data.data);
         }
       } catch (error) {}
     }
@@ -132,7 +147,7 @@ let ProductEditForm = ({}) => {
             <span className="form__form-group-label">Product Name</span>
             {/* {console.log("here", filteredProduct.name)} */}
             <Input
-              name="name"
+              name={"name"}
               type="text"
               value={product.name}
               onChange={handelInput}
@@ -204,7 +219,6 @@ let ProductEditForm = ({}) => {
 
                   if (filteredCate.length > 0) {
                     setShowInfo(1);
-                    console.log("what is the");
                   }
                 }}
               >
@@ -298,6 +312,41 @@ let ProductEditForm = ({}) => {
           <div className="form__form-group" style={{height: "10%"}}>
             <span className="form__form-group-label">Image</span>
             <div className="form__form-group-field">
+              <div className="dropzone dropzone--multiple">
+                <div {...getRootProps()} className="dropzone__input">
+                  {(!files || files.length === 0) && (
+                    <div className="dropzone__drop-here">
+                      <span className="lnr lnr-upload" /> Drop file here to
+                      upload
+                    </div>
+                  )}
+                  <input {...getInputProps()} />
+                </div>
+                {/* <div>
+                  <ul>{files}</ul>
+                </div> */}
+
+                {files && Array.isArray(files) && (
+                  <div className="dropzone__imgs-wrapper">
+                    {files.map((file, i) => (
+                      <div
+                        className="dropzone__img"
+                        key={file.i}
+                        style={{backgroundImage: `url(${file.preview})`}}
+                      >
+                        <p className="dropzone__img-name">{file.name}</p>
+                        <button
+                          className="dropzone__img-delete"
+                          type="button"
+                          onClick={(e) => removeFile(i, e)}
+                        >
+                          Remove
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
               {/* <RenderDropZoneField name={"image"} value={product.image} /> */}
             </div>
           </div>
@@ -306,10 +355,10 @@ let ProductEditForm = ({}) => {
           <FormGroup className="form__form-group">
             <span className="form__form-group-label">Description</span>
 
-            <CKEditor
-              name="myeditor"
-              onChange={(onEditorChange, handelInput)}
-              value={product.sku}
+            <Input
+              name={"description"}
+              value={product.description}
+              onChange={handelInput}
             />
             {!descr && (
               <span className="form__form-group-error">
@@ -323,17 +372,39 @@ let ProductEditForm = ({}) => {
             <span className="form__form-group-label">Gallery</span>
             <div className="form__form-group-field">
               <div className="dropzone dropzone--multiple">
-                <div {...getRootProps()}>
-                  <input {...getInputProps()} />
-
-                  {isDragActive ? (
-                    <p>Drop the files here ...</p>
-                  ) : (
-                    <p>
-                      Drag 'n' drop some files here, or click to select files
-                    </p>
+                <div {...getRootProps()} className="dropzone__input">
+                  {(!files || files.length === 0) && (
+                    <div className="dropzone__drop-here">
+                      <span className="lnr lnr-upload" /> Drop file here to
+                      upload
+                    </div>
                   )}
+                  <input {...getInputProps()} />
                 </div>
+                {/* <div>
+                  <ul>{files}</ul>
+                </div> */}
+
+                {files && Array.isArray(files) && (
+                  <div className="dropzone__imgs-wrapper">
+                    {files.map((file, i) => (
+                      <div
+                        className="dropzone__img"
+                        key={file.i}
+                        style={{backgroundImage: `url(${file.preview})`}}
+                      >
+                        <p className="dropzone__img-name">{file.name}</p>
+                        <button
+                          className="dropzone__img-delete"
+                          type="button"
+                          onClick={(e) => removeFile(i, e)}
+                        >
+                          Remove
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
             </div>
           </FormGroup>
@@ -342,11 +413,7 @@ let ProductEditForm = ({}) => {
         <br />
         <span className="form__form-group-error">{config.error}</span>
         <ButtonToolbar className="form__button-toolbar">
-          <Button
-            disabled={config.loading}
-            color="primary"
-            type={!descr ? "button" : "submit"}
-          >
+          <Button disabled={config.loading} color="primary" type={"submit"}>
             {config.loading ? "Loading..." : "Save"}
           </Button>
           <Button type="button">Cancel</Button>
