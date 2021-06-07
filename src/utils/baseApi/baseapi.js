@@ -1,4 +1,4 @@
-export const baseurl = "https://haatbazaar.herokuapp.com";
+export const baseurl = "https://api.cloudpasal.com/";
 
 export const baseapi = `${baseurl}/api/v1/vendor`;
 
