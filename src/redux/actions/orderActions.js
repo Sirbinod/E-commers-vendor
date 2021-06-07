@@ -1,4 +1,5 @@
 import axios from "axios";
+import {orderdetailapi, orderlistapi} from "../../utils/baseApi/baseapi";
 
 export const SORDER_START = "SORDER_START";
 export const LOAD_NEW_ORDERS = "LOAD_NEW_ORDERS";
@@ -20,7 +21,7 @@ export const getorderstart = (token) => (dispatch) => {
 
   axios({
     method: "get",
-    url: "https://haatbazaar.herokuapp.com/api/v1/vendor/order/list",
+    url: orderlistapi,
     headers: {Authorization: "Bearer " + token},
   })
     .then(function (response) {
@@ -35,7 +36,7 @@ export const orderDetails = (token, orderId) => {
   console.log(token);
   var config = {
     method: "get",
-    url: "https://haatbazaar.herokuapp.com/api/v1/vendor/order/14u3elkoshpd4i/detail",
+    url: orderdetailapi,
     headers: {
       Authorization: `Bearer ${token}`,
     },

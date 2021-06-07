@@ -37,12 +37,12 @@ const LogInForm = ({fieldUser, typeFieldUser, form, handleSubmit}) => {
         localStorage.setItem("loginsuccess", res.data.success);
         return true;
       } else {
-        showNotification("ltr", "danger", res.data.message, "Login Fail");
+        showNotification("ltr", "danger", res, "Login Fail");
         return false;
       }
     } catch (error) {}
     dispatch(authError());
-    showNotification("ltr", "danger", error.data.message, "Login Fail");
+    showNotification("ltr", "danger", error, "Login Fail");
     return false;
   };
   return (

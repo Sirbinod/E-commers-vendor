@@ -58,7 +58,6 @@ const ProductAddForm = ({handleSubmit, reset}) => {
     }
   };
   const onEditorChange = (evt) => {
-    console.log("here");
     setDescr(evt.editor.getData());
   };
   const Productadder = async (data) => {
@@ -86,7 +85,7 @@ const ProductAddForm = ({handleSubmit, reset}) => {
         sku: data.sku,
         price: data.price,
         mainCategory: data.mainCategory.value,
-        subCategory: data.subCategory.value ? data.subCategory.value : "",
+        subCategory: data.subCategory ? data.subCategory.value : "",
         childCategory: data.childCategory ? data.childCategory.value : "",
         discount: data.discount,
         stock: parseInt(data.stock),
@@ -122,8 +121,6 @@ const ProductAddForm = ({handleSubmit, reset}) => {
     }
   };
   const chkdchild = (data) => {
-    console.log(subdata);
-    console.log(data);
     const reqtem2 = subdata.filter((cata) => cata._id === data);
     const subArray2 = [];
     if (reqtem2[0].children.length > 0) {
@@ -142,7 +139,6 @@ const ProductAddForm = ({handleSubmit, reset}) => {
     setChildcategory(subArray2);
   };
   const chkchild = (data) => {
-    console.log(data);
     const reqtem = catas.filter((cata) => cata._id === data);
     const subArray = [];
     if (reqtem[0].children.length > 0) {

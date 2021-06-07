@@ -1,13 +1,14 @@
-import axios from 'axios';
+import axios from "axios";
+import {vendorlistapi} from "../../utils/baseApi/baseapi";
 
-export const SVENDOR_START = 'SVENDOR_START';
-export const LOAD_NEW_VENDOR = 'LOAD_NEW_VENDOR';
+export const SVENDOR_START = "SVENDOR_START";
+export const LOAD_NEW_VENDOR = "LOAD_NEW_VENDOR";
 
-const vendorschkStart = ()=>{
-    return {
-        type:SVENDOR_START
-    }
-}
+const vendorschkStart = () => {
+  return {
+    type: SVENDOR_START,
+  };
+};
 function loadvendors(vendors) {
   return {
     type: LOAD_NEW_VENDOR,
@@ -15,26 +16,18 @@ function loadvendors(vendors) {
   };
 }
 
+export const getvendorsstart = (token) => (dispatch) => {
+  dispatch(vendorschkStart());
 
-export const getvendorsstart = (token) => dispatch=>{
-       dispatch(vendorschkStart());
-  
-axios({
-  method: 'get',
-  url: 'https://haatbazaar.herokuapp.com/api/v1/admin/vendor/list',
-  headers:  {"Authorization" : "Bearer "+token}
+  axios({
+    method: "get",
+    url: vendorlistapi,
+    headers: {Authorization: "Bearer " + token},
   })
-  .then(function (response) {
-    dispatch(loadvendors(response.data.data));
-
+    .then(function (response) {
+      dispatch(loadvendors(response.data.data));
     })
     .catch(function (error) {
-      console.log(error)
-    
-  });
-
-
-}
-
-
-
+      console.log(error);
+    });
+};

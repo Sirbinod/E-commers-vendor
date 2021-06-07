@@ -2,13 +2,7 @@ import React from "react";
 import Select from "react-select";
 import PropTypes from "prop-types";
 
-export const SelectField = ({
-  onChange,
-  value,
-  name,
-  placeholder,
-  options,
-}) => {
+export const SelectField = ({onChange, value, name, placeholder, options}) => {
   const handleChange = (selectedOption) => {
     onChange(selectedOption);
   };
@@ -51,18 +45,9 @@ SelectField.defaultProps = {
   options: [],
 };
 
-const renderSelectField = ({
-  input,
-  meta,
-  options,
-  placeholder,
-  className,
-}) => (
+const renderSelectField = ({input, options, placeholder, className}) => (
   <div className={`form__form-group-input-wrap ${className}`}>
     <SelectField {...input} options={options} placeholder={placeholder} />
-    {meta.touched && meta.error && (
-      <span className="form__form-group-error">{meta.error}</span>
-    )}
   </div>
 );
 

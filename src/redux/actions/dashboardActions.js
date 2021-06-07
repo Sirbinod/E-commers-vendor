@@ -1,13 +1,14 @@
-import axios from 'axios';
+import axios from "axios";
+import {dashboardapi} from "../../utils/baseApi/baseapi";
 
-export const SDATAS_START = 'SDATAS_START';
-export const LOAD_NEW_DATAS = 'LOAD_NEW_DATAS';
+export const SDATAS_START = "SDATAS_START";
+export const LOAD_NEW_DATAS = "LOAD_NEW_DATAS";
 
-const dashboardchkStart = ()=>{
-    return {
-        type:SDATAS_START
-    }
-}
+const dashboardchkStart = () => {
+  return {
+    type: SDATAS_START,
+  };
+};
 function loaddatas(datatoput) {
   return {
     type: LOAD_NEW_DATAS,
@@ -15,26 +16,18 @@ function loaddatas(datatoput) {
   };
 }
 
+export const getdatasstart = (token) => (dispatch) => {
+  dispatch(dashboardchkStart());
 
-export const getdatasstart = (token) => dispatch=>{
-       dispatch(dashboardchkStart());
-  
-axios({
-  method: 'get',
-  url: 'https://haatbazaar.herokuapp.com/api/v1/vendor/statistics',
-  headers:  {"Authorization" : "Bearer "+token}
+  axios({
+    method: "get",
+    url: dashboardapi,
+    headers: {Authorization: "Bearer " + token},
   })
-  .then(function (response) {
-    dispatch(loaddatas(response.data.data));
-
+    .then(function (response) {
+      dispatch(loaddatas(response.data.data));
     })
     .catch(function (error) {
-      console.log(error)
-    
-  });
-
-
-}
-
-
-
+      console.log(error);
+    });
+};

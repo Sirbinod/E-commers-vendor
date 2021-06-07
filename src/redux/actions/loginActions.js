@@ -1,4 +1,5 @@
 import axios from "axios";
+import {loginapi} from "../../utils/baseApi/baseapi";
 export const LOGGEDIN = "LOGGEDIN";
 export const LOGIN_ERROR_AUTH = "LOGIN_ERROR_AUTH";
 export const LOGIN_START = "LOGIN_START";
@@ -27,11 +28,8 @@ export const authError = (error) => {
 };
 
 export const login = async (email, password) => {
-  return await axios.post(
-    "https://haatbazaar.herokuapp.com/api/v1/vendor/auth/signin",
-    {
-      email: email,
-      password: password,
-    }
-  );
+  return await axios.post(loginapi, {
+    email: email,
+    password: password,
+  });
 };

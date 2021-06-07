@@ -3,6 +3,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {getme, getmedeleted} from "../../../../redux/actions/itemActions";
 import PropTypes from "prop-types";
 import {Link} from "react-router-dom";
+import {baseurl} from "../../../../utils/baseApi/baseapi";
 // import { Alert, Button } from 'reactstrap';
 
 const PhotoFormatter = (value) => (
@@ -12,9 +13,9 @@ const PhotoFormatter = (value) => (
 );
 
 const StatusFormatter = (value) =>
-  value === "1" ? (
+  value === 1 ? (
     <span className="badge badge-secondary">Pending</span>
-  ) : value === "2" ? (
+  ) : value === 2 ? (
     <span className="badge badge-success">Approved</span>
   ) : (
     <span className="badge badge-warning">Suspended</span>
@@ -100,15 +101,16 @@ const CreateDataProductListTable = () => {
       alert("Cancelled");
     }
   };
-  if (done && items.length !== 0) {
+  console.log(items);
+  if (done) {
     data = [];
     let coun = 1;
     items.map((item) => {
       data.push({
         id: coun.toString(),
-        photo: PhotoFormatter("https://haatbazaar.herokuapp.com/" + item.image),
+        photo: PhotoFormatter(baseurl + item.image),
         name: item.name,
-        quantity: item.viewCounts.toString(),
+        quantity: item.stock.toString(),
         article: item.sku,
         price: item.price.toString(),
         categorymain: CategoryFormatter(
