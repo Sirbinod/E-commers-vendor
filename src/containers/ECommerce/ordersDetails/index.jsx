@@ -12,6 +12,7 @@ import {
   Table,
 } from "reactstrap";
 import { orderDetails } from "../../../redux/actions/orderActions";
+import { baseapi } from "../../../utils/baseApi/baseapi";
 
 const OrderDetails = ({ location }) => {
   var token = localStorage.getItem("token");
@@ -139,11 +140,7 @@ const OrderDetails = ({ location }) => {
                           <tr>
                             <td>
                               <img
-                                src={
-                                  "https://haatbazaar.herokuapp.com" +
-                                  "/" +
-                                  e.product.image
-                                }
+                                src={baseapi + "/" + e.product.image}
                                 style={{
                                   objectFit: "cover",
                                   height: "100px",

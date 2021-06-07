@@ -1,5 +1,5 @@
 import axios from "axios";
-import {useDispatch} from "react-redux";
+import { useDispatch } from "react-redux";
 import {
   itemsapi,
   itemeditapi,
@@ -8,6 +8,8 @@ import {
 } from "../../utils/baseApi/baseapi";
 
 export const SITEM_START = "SITEM_START";
+export const SITEM_FAIL = "SITEM_FAIL";
+
 export const LOAD_NEW_ITEMS = "LOAD_NEW_ITEMS";
 export const UPDATE_NEW_ITEMS = "UPDATE_NEW_ITEMS";
 export const DELETE_NEW_ITEMS = "DELETE_NEW_ITEMS";
@@ -15,6 +17,13 @@ export const DELETE_NEW_ITEMS = "DELETE_NEW_ITEMS";
 const itemchkStart = () => {
   return {
     type: SITEM_START,
+  };
+};
+
+const failStart = (err) => {
+  return {
+    type: SITEM_FAIL,
+    payload: err,
   };
 };
 function loaditem(items) {
@@ -39,35 +48,36 @@ function deleteitem(items) {
   };
 }
 
-// export const seedata = () => {
-// loaditem(['abc', 'def']);
-//  console.log('We are here');
-// };
-
 export const getme = (token) => (dispatch) => {
   dispatch(itemchkStart());
 
   axios({
     method: "get",
     url: itemsapi,
-    headers: {Authorization: "Bearer " + token},
+    headers: { Authorization: "Bearer " + token },
   })
     .then(function (response) {
       dispatch(loaditem(response.data.data));
     })
     .catch(function (error) {
+      failStart(error);
       console.log(error);
     });
 };
 
 export const addproduct = (token, tosenddata) => {
-  // dispatch(itemchkStart());
+  if (tosenddata.subCategory === "") {
+    tosenddata.subCategory = null;
+  }
+
+  if (tosenddata.childCategory === "") {
+    tosenddata.childCategory = null;
+  }
   console.log(tosenddata);
-  return axios({
-    method: "post",
-    url: itemscreateapi,
-    data: tosenddata,
-    headers: {Authorization: "Bearer " + token},
+  return axios.post(itemscreateapi, tosenddata, {
+    headers: {
+      Authorization: "Bearer " + token,
+    },
   });
 };
 
@@ -77,7 +87,7 @@ export const updateProduct = (token, data, id) => {
     method: "put",
     url: itemeditapi + id + `/edit`,
     data: data,
-    headers: {Authorization: "Bearer " + token},
+    headers: { Authorization: "Bearer " + token },
   });
 };
 export const getmedeleted = (token, slug) => (dispatch) => {
@@ -85,7 +95,7 @@ export const getmedeleted = (token, slug) => (dispatch) => {
   axios({
     method: "delete",
     url: itemdeleteapi,
-    headers: {Authorization: "Bearer " + token},
+    headers: { Authorization: "Bearer " + token },
   })
     .then(function (response) {
       // dispatch(loaditem(response.data.data));
@@ -95,9 +105,3 @@ export const getmedeleted = (token, slug) => (dispatch) => {
       console.log(error);
     });
 };
-//  export const fetchData = (token) => dispatch =>  {
-
-//        dispatch(itemchkStart());
-//       getme(token, dispatch)
-
-// }

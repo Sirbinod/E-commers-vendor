@@ -9,15 +9,20 @@ const initialState = {
   loading: false,
   items: [],
   done: false,
+  process: null,
+  listItems: false,
 };
 const updateobject = (oldState, newState) => {
-  return {...oldState, ...newState};
+  return { ...oldState, ...newState };
 };
 
 const itemReducer = (state = initialState, action) => {
   switch (action.type) {
     case SITEM_START:
-      return state;
+      return updateobject(state, {
+        loading: true,
+        listItems: true,
+      });
     case LOAD_NEW_ITEMS:
       if (state.done === false) {
         return updateobject(state, {
@@ -42,7 +47,7 @@ const itemReducer = (state = initialState, action) => {
         message: "We are ready to update",
       };
     case DELETE_NEW_ITEMS:
-      return {...state, error: action.error, loading: false};
+      return { ...state, error: action.error, loading: false };
     default:
       return state;
   }

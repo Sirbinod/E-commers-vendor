@@ -1,9 +1,8 @@
 import React from "react";
-import { ButtonToolbar, Card, CardBody, Col } from "reactstrap";
+import { Card, CardBody, Col } from "reactstrap";
 import { useSelector } from "react-redux";
 
 import PropTypes from "prop-types";
-import { Link } from "react-router-dom";
 
 import ReactTableBase from "../../../../shared/components/table/ReactTableBase";
 
@@ -25,11 +24,6 @@ const ProductsListTable = ({ productListTableData, data }) => {
         <CardBody className="products-list">
           <div className="card__title">
             <h5 className="bold-text">Products List</h5>
-            {/* <ButtonToolbar className="products-list__btn-toolbar-top">
-              <Link className="btn btn-primary products-list__btn-add" to="/e-commerce/product_edit">Add new
-                product
-              </Link>
-            </ButtonToolbar> */}
           </div>
           {done === true && loading === false ? (
             <ReactTableBase

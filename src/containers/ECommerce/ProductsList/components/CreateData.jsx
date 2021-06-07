@@ -1,10 +1,9 @@
-import React, {useMemo, useEffect} from "react";
-import {useDispatch, useSelector} from "react-redux";
-import {getme, getmedeleted} from "../../../../redux/actions/itemActions";
+import React, { useMemo, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { getme, getmedeleted } from "../../../../redux/actions/itemActions";
 import PropTypes from "prop-types";
-import {Link} from "react-router-dom";
-import {baseurl} from "../../../../utils/baseApi/baseapi";
-// import { Alert, Button } from 'reactstrap';
+import { Link } from "react-router-dom";
+import { baseurl } from "../../../../utils/baseApi/baseapi";
 
 const PhotoFormatter = (value) => (
   <div className="products-list__img-wrap">
@@ -24,22 +23,22 @@ const StatusFormatter = (value) =>
 StatusFormatter.propTypes = {
   value: PropTypes.string.isRequired,
 };
-//  alert(token)
-// fetchData(token)
-
-let data = [];
 
 const CreateDataProductListTable = () => {
+  let data = [];
   const CategoryFormatter = (value1, value2, value3) => {
     return (
       <div>
-        <span className="badge badge-primary" style={{"margin-left": "10px"}}>
+        <span className="badge badge-primary" style={{ "margin-left": "10px" }}>
           {value1}
         </span>
-        <span className="badge badge-secondary" style={{"margin-left": "10px"}}>
+        <span
+          className="badge badge-secondary"
+          style={{ "margin-left": "10px" }}
+        >
           {value2}
         </span>
-        <span className="badge badge-success" style={{"margin-left": "10px"}}>
+        <span className="badge badge-success" style={{ "margin-left": "10px" }}>
           {value3}
         </span>
       </div>
@@ -77,18 +76,15 @@ const CreateDataProductListTable = () => {
   const dispatch = useDispatch();
 
   var token = localStorage.getItem("token");
-  // update this line
-  const {done, items} = useSelector((state) => state.items);
+  const { done, items } = useSelector((state) => state.items);
 
-  useEffect(() => {
-    if (!done && items.length === 0) {
-      // api call
-      dispatch(getme(token));
-    }
-  });
+  // useEffect(() => {
+  //   if (!done && items.length === 0) {
+  //     dispatch(getme(token));
+  //   }
+  // });
   const deletechk = (e, idd) => {
     e.preventDefault();
-    // const idd = this.attr('id');
     const r = window.confirm("Do you really want to Delete?");
     if (r === true) {
       var token = localStorage.getItem("token");
@@ -96,12 +92,10 @@ const CreateDataProductListTable = () => {
       const slugdata = reqtem[0].slug;
 
       dispatch(getmedeleted(token, slugdata));
-      // alert(idd);
     } else {
       alert("Cancelled");
     }
   };
-  console.log(items);
   if (done) {
     data = [];
     let coun = 1;

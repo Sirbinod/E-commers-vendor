@@ -18,8 +18,10 @@ export const orderlistapi = `${baseapi}/order/list`;
 
 export const orderdetailapi = `${baseapi}/order/14u3elkoshpd4i/detail`;
 
-export const baseadmin = "https://haatbazaar.herokuapp.com/api/v1/admin";
+// export const baseadmin = "https://haatbazaar.herokuapp.com/api/v1/admin";
 
-export const userlistapi = `${baseadmin}/user/list`;
+// export const userlistapi = `${baseadmin}/user/list`;
+//
+// export const vendorlistapi = `${baseadmin}/vendor/list`;
 
-export const vendorlistapi = `${baseadmin}/vendor/list`;
+export const listCategoryListApi = `${baseurl}/api/v1/public/category/main/list`;
