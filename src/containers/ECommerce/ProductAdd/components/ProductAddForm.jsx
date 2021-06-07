@@ -1,23 +1,23 @@
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState} from "react";
 import PropTypes from "prop-types";
-import { Button, ButtonToolbar } from "reactstrap";
-import { Field, reduxForm } from "redux-form";
+import {Button, ButtonToolbar} from "reactstrap";
+import {Field, reduxForm} from "redux-form";
 import CurrencyUsdIcon from "mdi-react/CurrencyUsdIcon";
 import TagIcon from "mdi-react/TagIcon";
-import { useDispatch, useSelector } from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import renderDropZoneMultipleField from "../../../../shared/components/form/DropZoneMultiple";
 import renderSelectField from "../../../../shared/components/form/Select";
-import { getcategorystart } from "../../../../redux/actions/categoryActions";
-import { addproduct } from "../../../../redux/actions/itemActions";
+import {getcategorystart} from "../../../../redux/actions/categoryActions";
+import {addproduct} from "../../../../redux/actions/itemActions";
 import renderDropZoneField from "../../../../shared/components/form/DropZone";
 import CKEditor from "ckeditor4-react";
 import Input from "../../../../shared/components/form/Input";
 import validate from "./validation";
 
-const ProductAddForm = ({ handleSubmit, reset }) => {
+const ProductAddForm = ({handleSubmit, reset}) => {
   const dispatch = useDispatch();
   let data = [];
-  const { done, catas, listCategory } = useSelector((state) => state.catas);
+  const {done, catas, listCategory} = useSelector((state) => state.catas);
   const [fileBase64String, setFileBase64String] = useState("");
   const [subCategory, setSubcategory] = useState([]);
   const [childCategory, setChildcategory] = useState([]);
@@ -25,11 +25,10 @@ const ProductAddForm = ({ handleSubmit, reset }) => {
   const [showInfo, setShowInfo] = useState("");
   const [showchildInfo, setShowchildInfo] = useState("");
   const [descr, setDescr] = useState("");
-  const [config, setconfig] = useState({ loading: false, error: null });
+  const [config, setconfig] = useState({loading: false, error: null});
 
   useEffect(() => {
     if (!listCategory) {
-      alert(listCategory);
       // api call
       dispatch(getcategorystart());
     }
@@ -161,7 +160,7 @@ const ProductAddForm = ({ handleSubmit, reset }) => {
     name,
 
     onChange,
-    meta: { touched, error },
+    meta: {touched, error},
   }) => {
     console.log(error);
     return (
@@ -229,7 +228,7 @@ const ProductAddForm = ({ handleSubmit, reset }) => {
         </div>
         <div
           className="form__form-group"
-          style={{ display: showInfo === 1 ? "block" : "none" }}
+          style={{display: showInfo === 1 ? "block" : "none"}}
         >
           <span className="form__form-group-label">Sub Category</span>
           <div className="form__form-group-field">
@@ -245,7 +244,7 @@ const ProductAddForm = ({ handleSubmit, reset }) => {
         </div>
         <div
           className="form__form-group"
-          style={{ display: showchildInfo === 1 ? "block" : "none" }}
+          style={{display: showchildInfo === 1 ? "block" : "none"}}
         >
           <span className="form__form-group-label">Child Category</span>
           <div className="form__form-group-field">
@@ -288,7 +287,7 @@ const ProductAddForm = ({ handleSubmit, reset }) => {
         </div>
       </div>
       <div className="form__half">
-        <div className="form__form-group" style={{ height: "10%" }}>
+        <div className="form__form-group" style={{height: "10%"}}>
           <span className="form__form-group-label">Image</span>
           <div className="form__form-group-field">
             <Field name="image" component={renderDropZoneField} />
