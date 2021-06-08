@@ -1,79 +1,53 @@
-import {Button, ButtonToolbar, Form, FormGroup, Input} from "reactstrap";
+import React, {useEffect, useState} from "react";
+import PropTypes from "prop-types";
+import {Button, ButtonToolbar} from "reactstrap";
+import {Field, reduxForm} from "redux-form";
 import CurrencyUsdIcon from "mdi-react/CurrencyUsdIcon";
 import TagIcon from "mdi-react/TagIcon";
-import RenderDropZoneMultipleField from "../../../../shared/components/form/DropZoneMultiple";
-import react, {useEffect, useState, useCallback} from "react";
-import Dropzone, {useDropzone} from "react-dropzone";
-import {useParams} from "react-router";
-import {updateProduct} from "../../../../redux/actions/itemActions";
+import {useDispatch, useSelector, connect} from "react-redux";
+import renderDropZoneMultipleField from "../../../../shared/components/form/DropZoneMultiple";
+import renderSelectField from "../../../../shared/components/form/Select";
 import {getcategorystart} from "../../../../redux/actions/categoryActions";
-
-import RenderDropZoneField from "../../../../shared/components/form/DropZone";
+import {addproduct, updateProduct} from "../../../../redux/actions/itemActions";
+import renderDropZoneField from "../../../../shared/components/form/DropZone";
 import CKEditor from "ckeditor4-react";
-import {useDispatch, useSelector} from "react-redux";
+import Input from "../../../../shared/components/form/Input";
+import validate from "./validation";
+import {useParams} from "react-router";
 
-let ProductEditForm = ({}) => {
-  const onDrop = useCallback((acceptedFiles) => {
-    // Do something with the files
-  }, []);
-  const {getRootProps, getInputProps, acceptedFiles} = useDropzone({onDrop});
-
-  const {done, catas} = useSelector((state) => state.catas);
+const ProductAddForm = ({handleSubmit, reset}) => {
+  const {id} = useParams();
+  const dispatch = useDispatch();
+  let data = [];
+  const {done, catas, listCategory} = useSelector((state) => state.catas);
   const [fileBase64String, setFileBase64String] = useState("");
-
   const [subCategory, setSubcategory] = useState([]);
   const [childCategory, setChildcategory] = useState([]);
+  const [subdata, setSubdata] = useState([]);
   const [showInfo, setShowInfo] = useState("");
   const [showchildInfo, setShowchildInfo] = useState("");
   const [descr, setDescr] = useState("");
   const [config, setconfig] = useState({loading: false, error: null});
-
-  const {id} = useParams();
   const {items} = useSelector((state) => state.items);
-  let filteredProduct = items.filter((item) => item._id === id)[0];
 
-  const [product, setProduct] = useState({
-    name: filteredProduct.name,
-    sku: filteredProduct.sku,
-    shortname: filteredProduct.shortname,
-    price: filteredProduct.price,
-    brand: filteredProduct.brand,
-    mainCategory: filteredProduct.mainCategory,
-    subCategory: filteredProduct.subCategory,
-    childCategory: filteredProduct.childCategory,
-    stock: filteredProduct.stock,
-    discount: filteredProduct.discount,
-    tags: filteredProduct.tags,
-    image: filteredProduct.image,
-    description: filteredProduct.description,
-    gallery: filteredProduct.gallery,
-  });
-  console.log("product ma k xsss", product);
-  const files = acceptedFiles.map((file) => (
-    <li key={file.path}>
-      {file.path} - {file.size} bytes
-    </li>
-  ));
-
-  const removeFile = (index, e) => {
-    e.preventDefault();
-    value.filter((val, i) => i !== index);
-  };
-
-  let name, value;
-  const handelInput = (e) => {
-    name = e.target.name;
-    value = e.target.value;
-    setProduct({...product, [name]: value});
-  };
-  const dispatch = useDispatch();
+  const fitterItem = items.filter((item) => item._id === id)[0];
 
   useEffect(() => {
-    if (!done && catas.length === 0) {
+    if (!listCategory) {
+      alert(listCategory);
       // api call
       dispatch(getcategorystart());
     }
   });
+  // setShowInfo(0);
+  // if (listCategory && catas.length !== 0) {
+  catas.map((cata) => {
+    data.push({
+      value: cata._id,
+      label: cata.name,
+    });
+  });
+  // }
 
   const encodeFileBase64 = (file) => {
     var reader = new FileReader();
@@ -81,346 +55,329 @@ let ProductEditForm = ({}) => {
       reader.readAsDataURL(file);
       reader.onload = () => {
         var Base64 = reader.result;
-        // console.log(Base64);
+
         setFileBase64String(Base64);
       };
-      reader.onerror = (error) => {
-        console.log("error: ", error);
-      };
+      reader.onerror = (error) => {};
     }
   };
-  // const onEditorChange = (evt) => {
-  //   setDescr(evt.editor.getData());
-  //   setProduct(...product, descr);
-  // };
-  const updateData = async (e) => {
-    console.log("what the fuck");
-    const file = product.image[0];
+  const onEditorChange = (evt) => {
+    setDescr(evt.editor.getData());
+  };
+  const Productadder = async (data) => {
+    // const desc = data.myeditor;
+
+    const file = data.image[0];
     encodeFileBase64(file);
     const nd = fileBase64String.split(";base64,");
     const imagess = nd[1];
 
-    const file2 = product.gallery;
+    const file2 = data.gallery;
     const arr2 = [];
     file2.map((file22) => {
       encodeFileBase64(file22);
       const nd = fileBase64String.split(";base64,");
       arr2.push(nd[1]);
     });
+
     if (!imagess == "" && arr2 != []) {
-      const data = {
-        name: product.name,
-        shortname: product.shortname,
-        sku: product.sku,
-        price: product.price,
-        mainCategory: product.mainCategory.value,
-        subCategory: product.subCategory ? product.subCategory.value : "",
-        childCategory: product.childCategory
-          ? product.childCategory.value
-          : null,
-        discount: product.discount,
-        stock: parseInt(product.stock),
-        brand: product.brand,
+      const token = localStorage.getItem("token");
+
+      const tosenddata = {
+        name: data.name,
+        shortname: data.shortname,
+        sku: data.sku,
+        price: data.price,
+        mainCategory: data.mainCategory.value,
+        subCategory: data.subCategory ? data.subCategory.value : null,
+        childCategory: data.childCategory ? data.childCategory.value : null,
+        discount: data.discount,
+        stock: parseInt(data.stock),
+        brand: data.brand,
         image: imagess,
         gallery: arr2,
-        tags: product.tags,
-        description: product.description,
+        tags: data.tags,
+        description: descr,
         publish: false,
       };
-      console.log("k xa data:", data);
       try {
-        const token = localStorage.getItem("token");
-        const req = await updateProduct(token, data, id);
-        if (req.success == true) {
-          dispatch(updateProduct(req.data.data));
-          console.log(req.data.data);
+        setconfig({
+          ...config,
+          loading: true,
+        });
+        const response = await updateProduct(token, tosenddata, id);
+        if (response.data.status) {
+          dispatch(updateProduct(response.data));
+        } else {
+          setconfig({
+            ...config,
+            loading: false,
+            error: response.data.message,
+          });
         }
-      } catch (error) {}
+        reset();
+      } catch (err) {
+        setconfig({
+          ...config,
+
+          loading: false,
+          error: err.toString(),
+        });
+      }
     }
+  };
+  const chkdchild = (data) => {
+    const reqtem2 = subdata.filter((cata) => cata._id === data);
+    const subArray2 = [];
+    if (reqtem2[0].children.length > 0) {
+      setShowchildInfo(1);
+      const subData2 = reqtem2[0].children;
+      subData2.map((s1) => {
+        subArray2.push({
+          value: s1._id,
+          label: s1.name,
+        });
+      });
+    } else {
+      setShowchildInfo(0);
+    }
+    setChildcategory(subArray2);
+  };
+  const chkchild = (data) => {
+    const reqtem = catas.filter((cata) => cata._id === data);
+    const subArray = [];
+    if (reqtem[0].children.length > 0) {
+      setShowInfo(1);
+      const subData = reqtem[0].children;
+      setSubdata(subData);
+      subData.map((s1) => {
+        subArray.push({
+          value: s1._id,
+          label: s1.name,
+        });
+      });
+    } else {
+      setShowInfo(0);
+      setShowchildInfo(0);
+    }
+    setSubcategory(subArray);
+  };
+
+  const descriptionField = ({
+    name,
+
+    onChange,
+    meta: {touched, error},
+  }) => {
+    <>
+      <div className="col-md-12">
+        <CKEditor name={name} onChange={onEditorChange} />
+      </div>
+
+      {touched && error && (
+        <span
+          style={{
+            marginTop: "100px",
+          }}
+          className="form__form-group-error"
+        >
+          {error}
+        </span>
+      )}
+    </>;
   };
 
   return (
-    <>
-      <Form className="form product-add" onSubmit={updateData}>
-        <div className="form__half">
-          <FormGroup className="form__form-group">
-            <span className="form__form-group-label">Product Name</span>
-            {/* {console.log("here", filteredProduct.name)} */}
-            <Input
-              name={"name"}
+    <form className="form product-add" onSubmit={handleSubmit(Productadder)}>
+      <div className="form__half">
+        <div className="form__form-group">
+          <span className="form__form-group-label">Product Name</span>
+          <Field
+            name={"name"}
+            defaultValue={fitterItem.name}
+            component={Input}
+          />
+        </div>
+        <div className="form__form-group-id-category">
+          <div className="form__form-group form__form-group-id">
+            <span className="form__form-group-label">SKU</span>
+            <Field
+              name={"sku"}
+              defaultValue={fitterItem.sku}
+              component={Input}
+            />
+          </div>
+          <div className="form__form-group form__form-group-id">
+            <span className="form__form-group-label">Short Name</span>
+            <Field
+              name={"shortname"}
+              defaultValue={fitterItem.shortname}
+              component={Input}
+            />
+          </div>
+        </div>
+        <div className="form__form-group-price-discount">
+          <div className="form__form-group form__form-group-price">
+            <span className="form__form-group-label">Price</span>
+            <Field
+              name={"price"}
+              defaultValue={fitterItem.price}
+              component={Input}
+            >
+              <div className="form__form-group-icon">
+                <CurrencyUsdIcon />
+              </div>
+            </Field>
+          </div>
+          <div className="form__form-group">
+            <span className="form__form-group-label">Brand</span>
+            <Field
+              name={"brand"}
+              defaultValue={fitterItem.brand}
+              component={Input}
+            />
+          </div>
+        </div>
+        <div className="form__form-group">
+          <span className="form__form-group-label">Category</span>
+          <div className="form__form-group-field">
+            <Field
+              name="mainCategory"
+              component={renderSelectField}
               type="text"
-              value={product.name}
-              onChange={handelInput}
+              options={data}
+              onChange={(e) => chkchild(e.value)}
             />
-          </FormGroup>
-          <div className="form__form-group-id-category">
-            <FormGroup className="form__form-group form__form-group-id">
-              <span className="form__form-group-label">SKU</span>
-              <Input
-                // defaultValue={filteredProduct.sku}
-                name={"sku"}
-                value={product.sku}
-                onChange={handelInput}
-              />
-            </FormGroup>
-            <FormGroup className="form__form-group form__form-group-id">
-              <span className="form__form-group-label">Short Name</span>
-              <Input
-                // defaultValue={filteredProduct.shortname}
-                name={"shortname"}
-                value={product.shortname}
-                onChange={handelInput}
-              />
-            </FormGroup>
           </div>
-          <div className="form__form-group-price-discount">
-            <FormGroup className="form__form-group form__form-group-price">
-              <span className="form__form-group-label">Price</span>
-              <Input
-                // defaultValue={filteredProduct.price}
-                name={"price"}
-                value={product.price}
-                onChange={handelInput}
-              >
-                <div className="form__form-group-icon">
-                  <CurrencyUsdIcon />
-                </div>
-              </Input>
-            </FormGroup>
-            <FormGroup className="form__form-group">
-              <span
-                // defaultValue={filteredProduct.brand}
-                className="form__form-group-label"
-              >
-                Brand
-              </span>
-              <Input
-                name={"brand"}
-                value={product.brand}
-                onChange={handelInput}
-              />
-            </FormGroup>
+        </div>
+        <div
+          className="form__form-group"
+          style={{display: showInfo === 1 ? "block" : "none"}}
+        >
+          <span className="form__form-group-label">Sub Category</span>
+          <div className="form__form-group-field">
+            <Field
+              name="subCategory"
+              component={renderSelectField}
+              type="text"
+              options={subCategory}
+              value={descr}
+              onChange={(e) => chkdchild(e.value)}
+            />
           </div>
-          <FormGroup className="form__form-group">
-            <span className="form__form-group-label">Category</span>
-            <div className="form__form-group-field">
-              <Input
-                type="select"
-                name="mainCategory"
-                value={product.mainCategory}
-                onChange={(e) => {
-                  const filteredCate = catas.filter(
-                    (x) => x._id == e.target.value
-                  )[0].children;
-
-                  console.log(filteredCate);
-                  setSubcategory(filteredCate);
-                  setProduct({...product, mainCategory: e.target.value});
-
-                  if (filteredCate.length > 0) {
-                    setShowInfo(1);
-                  }
-                }}
-              >
-                <option></option>
-                {catas.map((cat) => (
-                  <option value={cat._id}>{cat.name}</option>
-                ))}
-              </Input>
-            </div>
-          </FormGroup>
-          <FormGroup
-            className="form__form-group"
-            style={{display: showInfo === 1 ? "block" : "none"}}
-          >
-            <span className="form__form-group-label">Sub Category</span>
-            <div className="form__form-group-field">
-              <Input
-                name="subCategory"
-                type="select"
-                value={product.subCategory}
-                onChange={(e) => {
-                  const newCat = subCategory.filter(
-                    (x) => x._id == subCategory.id
-                  );
-                  if (newCat.children) {
-                    setChildcategory(newCat.children);
-                    setShowchildInfo(1);
-                  }
-                  setProduct({...product, subCategory: e.target.value});
-                }}
-              >
-                {subCategory &&
-                  subCategory.map((subCata) => (
-                    <option value={subCata._id}>{subCata.name}</option>
-                  ))}
-              </Input>
-            </div>
-          </FormGroup>
-          <FormGroup
-            className="form__form-group"
-            style={{display: showchildInfo === 1 ? "block" : "none"}}
-          >
-            <span className="form__form-group-label">Child Category</span>
-            <div className="form__form-group-field">
-              <Input name="childCategory" type="select" value="">
-                {childCategory.map((childCata) => (
-                  <option>childCata.name</option>
-                ))}
-              </Input>
-            </div>
-          </FormGroup>
-
-          <div className="form__form-group-price-discount">
-            <FormGroup className="form__form-group form__form-group-price">
-              <span className="form__form-group-label">Stock</span>
-              <Input
-                // defaultValue={filteredProduct.stock}
-                name={"stock"}
-                value={product.stock}
-                onChange={handelInput}
-              />
-            </FormGroup>
-            <FormGroup className="form__form-group">
-              <span className="form__form-group-label">Discount</span>
-              <Input
-                // defaultValue={filteredProduct.discount}
-                name={"discount"}
-                className="form__form-group-price"
-                value={product.discount}
-                onChange={handelInput}
-              >
-                <div className="form__form-group-icon">
-                  <TagIcon />
-                </div>
-              </Input>
-            </FormGroup>
+        </div>
+        <div
+          className="form__form-group"
+          style={{display: showchildInfo === 1 ? "block" : "none"}}
+        >
+          <span className="form__form-group-label">Child Category</span>
+          <div className="form__form-group-field">
+            <Field
+              name="childCategory"
+              component={renderSelectField}
+              type="text"
+              options={childCategory}
+              value=""
+            />
           </div>
+        </div>
 
-          <FormGroup className="form__form-group">
-            <span className="form__form-group-label">Tags</span>
-            <Input
-              // defaultValue={filteredProduct.tags}
-              name={"tags"}
+        <div className="form__form-group-price-discount">
+          <div className="form__form-group form__form-group-price">
+            <span className="form__form-group-label">Stock</span>
+            <Field
+              name={"stock"}
+              defaultValue={fitterItem.stock}
+              component={Input}
+            />
+          </div>
+          <div className="form__form-group">
+            <span className="form__form-group-label">Discount</span>
+            <Field
+              name={"discount"}
+              defaultValue={fitterItem.discount}
               className="form__form-group-price"
-              value={product.tags}
-              onChange={handelInput}
-            />
-          </FormGroup>
-        </div>
-        <div className="form__half">
-          <div className="form__form-group" style={{height: "10%"}}>
-            <span className="form__form-group-label">Image</span>
-            <div className="form__form-group-field">
-              <div className="dropzone dropzone--multiple">
-                <div {...getRootProps()} className="dropzone__input">
-                  {(!files || files.length === 0) && (
-                    <div className="dropzone__drop-here">
-                      <span className="lnr lnr-upload" /> Drop file here to
-                      upload
-                    </div>
-                  )}
-                  <input {...getInputProps()} />
-                </div>
-                {/* <div>
-                  <ul>{files}</ul>
-                </div> */}
-
-                {files && Array.isArray(files) && (
-                  <div className="dropzone__imgs-wrapper">
-                    {files.map((file, i) => (
-                      <div
-                        className="dropzone__img"
-                        key={file.i}
-                        style={{backgroundImage: `url(${file.preview})`}}
-                      >
-                        <p className="dropzone__img-name">{file.name}</p>
-                        <button
-                          className="dropzone__img-delete"
-                          type="button"
-                          onClick={(e) => removeFile(i, e)}
-                        >
-                          Remove
-                        </button>
-                      </div>
-                    ))}
-                  </div>
-                )}
+              component={Input}
+            >
+              <div className="form__form-group-icon">
+                <TagIcon />
               </div>
-              {/* <RenderDropZoneField name={"image"} value={product.image} /> */}
-            </div>
+            </Field>
           </div>
         </div>
-        <div className="row col-md-12">
-          <FormGroup className="form__form-group">
-            <span className="form__form-group-label">Description</span>
 
-            <Input
-              name={"description"}
-              value={product.description}
-              onChange={handelInput}
+        <div className="form__form-group">
+          <span className="form__form-group-label">Tags</span>
+          <Field
+            name={"tags"}
+            defaultValue={fitterItem.tags}
+            className="form__form-group-price"
+            component={Input}
+          />
+        </div>
+      </div>
+      <div className="form__half">
+        <div className="form__form-group" style={{height: "10%"}}>
+          <span className="form__form-group-label">Image</span>
+          <div className="form__form-group-field">
+            <Field
+              name="image"
+              defaultValue={fitterItem.image}
+              component={renderDropZoneField}
             />
-            {!descr && (
-              <span className="form__form-group-error">
-                Description is required
-              </span>
-            )}
-          </FormGroup>
+          </div>
         </div>
-        <div className="row col-md-12">
-          <FormGroup className="form__form-group">
-            <span className="form__form-group-label">Gallery</span>
-            <div className="form__form-group-field">
-              <div className="dropzone dropzone--multiple">
-                <div {...getRootProps()} className="dropzone__input">
-                  {(!files || files.length === 0) && (
-                    <div className="dropzone__drop-here">
-                      <span className="lnr lnr-upload" /> Drop file here to
-                      upload
-                    </div>
-                  )}
-                  <input {...getInputProps()} />
-                </div>
-                {/* <div>
-                  <ul>{files}</ul>
-                </div> */}
+      </div>
+      <div className="row col-md-12">
+        <div className="form__form-group">
+          <span className="form__form-group-label">Description</span>
 
-                {files && Array.isArray(files) && (
-                  <div className="dropzone__imgs-wrapper">
-                    {files.map((file, i) => (
-                      <div
-                        className="dropzone__img"
-                        key={file.i}
-                        style={{backgroundImage: `url(${file.preview})`}}
-                      >
-                        <p className="dropzone__img-name">{file.name}</p>
-                        <button
-                          className="dropzone__img-delete"
-                          type="button"
-                          onClick={(e) => removeFile(i, e)}
-                        >
-                          Remove
-                        </button>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-            </div>
-          </FormGroup>
+          <CKEditor
+            name="myeditor"
+            defaultValue={fitterItem.description}
+            onChange={onEditorChange}
+          />
+          {!descr && (
+            <span className="form__form-group-error">
+              Description is required
+            </span>
+          )}
         </div>
-
-        <br />
-        <span className="form__form-group-error">{config.error}</span>
-        <ButtonToolbar className="form__button-toolbar">
-          <Button disabled={config.loading} color="primary" type={"submit"}>
-            {config.loading ? "Loading..." : "Save"}
-          </Button>
-          <Button type="button">Cancel</Button>
-        </ButtonToolbar>
-      </Form>
-    </>
+      </div>
+      <div className="row col-md-12">
+        <div className="form__form-group">
+          <span className="form__form-group-label">Gallery</span>
+          <div className="form__form-group-field">
+            <Field
+              name="gallery"
+              defaultValue={fitterItem.gallery}
+              component={renderDropZoneMultipleField}
+            />
+          </div>
+        </div>
+      </div>
+      <div></div>
+      <br />
+      <span className="form__form-group-error">{config.error}</span>
+      <ButtonToolbar className="form__button-toolbar">
+        <Button
+          disabled={config.loading}
+          color="primary"
+          type={!descr ? "button" : "submit"}
+        >
+          {config.loading ? "Loading..." : "Save"}
+        </Button>
+        <Button type="button" onClick={reset}>
+          Cancel
+        </Button>
+      </ButtonToolbar>
+    </form>
   );
 };
 
-export default ProductEditForm;
+export default connect()(
+  reduxForm({
+    form: "product_add_form", // a unique identifier for this form
+    validate: validate,
+  })(ProductAddForm)
+);

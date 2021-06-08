@@ -4,20 +4,17 @@ const Input = ({
   type,
   className,
   children,
-  defautValue,
+  defaultValue,
   meta: {touched, error},
 }) => (
   <div className={`form__form-group-input-wrap ${className}`}>
     <div className="form__form-group-field">
       {children}
 
-      {console.log("inputko ", defautValue)}
-
       <input
-        // onChange={(e) => (defautValue = e.target.value)}
-        value={defautValue}
         {...input}
         placeholder={placeholder}
+        defaultValue={defaultValue}
         type={type}
       />
     </div>

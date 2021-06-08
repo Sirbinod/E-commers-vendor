@@ -3,6 +3,7 @@ import { Card, CardBody, Col } from "reactstrap";
 import ProductGallery from "./ProductGallery";
 import ProductTabs from "./ProductTabs";
 import ColorSelect from "./ColorSelect";
+import { baseurl } from "../../../../utils/baseApi/baseapi";
 
 const ProductCard = (item) => {
   const [color, setColor] = useState("white");
@@ -17,7 +18,7 @@ const ProductCard = (item) => {
   const imggallery = [];
   item.items.gallery.map((gallimg) => {
     imggallery.push({
-      src: "https://haatbazaar.herokuapp.com/" + gallimg,
+      src: baseurl + gallimg,
     });
   });
   let price2 = 0;

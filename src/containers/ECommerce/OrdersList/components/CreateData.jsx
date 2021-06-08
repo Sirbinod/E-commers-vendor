@@ -47,13 +47,13 @@ const CreateDataOrderListTable = () => {
   var token = localStorage.getItem("token");
   // update this line
   const {done, orders} = useSelector((state) => state.orders);
-  console.log(orders);
-  useEffect(() => {
-    if (!done && orders.length === 0) {
-      // api call
-      dispatch(getorderstart(token));
-    }
-  });
+
+  // useEffect(() => {
+  //   if (!done && orders.length === 0) {
+  //     // api call
+  //     dispatch(getorderstart(token));
+  //   }
+  // });
 
   if (done && orders.length !== 0) {
     data = [];

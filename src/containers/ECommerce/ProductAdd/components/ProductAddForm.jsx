@@ -8,7 +8,10 @@ import {useDispatch, useSelector} from "react-redux";
 import renderDropZoneMultipleField from "../../../../shared/components/form/DropZoneMultiple";
 import renderSelectField from "../../../../shared/components/form/Select";
 import {getcategorystart} from "../../../../redux/actions/categoryActions";
-import {addproduct} from "../../../../redux/actions/itemActions";
+import {
+  addproduct,
+  addProductSuccess,
+} from "../../../../redux/actions/itemActions";
 import renderDropZoneField from "../../../../shared/components/form/DropZone";
 import CKEditor from "ckeditor4-react";
 import Input from "../../../../shared/components/form/Input";
@@ -17,7 +20,7 @@ import validate from "./validation";
 const ProductAddForm = ({handleSubmit, reset}) => {
   const dispatch = useDispatch();
   let data = [];
-  const {done, catas} = useSelector((state) => state.catas);
+  const {done, catas, listCategory} = useSelector((state) => state.catas);
   const [fileBase64String, setFileBase64String] = useState("");
   const [subCategory, setSubcategory] = useState([]);
   const [childCategory, setChildcategory] = useState([]);
@@ -28,20 +31,20 @@ const ProductAddForm = ({handleSubmit, reset}) => {
   const [config, setconfig] = useState({loading: false, error: null});
 
   useEffect(() => {
-    if (!done && catas.length === 0) {
+    if (!listCategory) {
       // api call
       dispatch(getcategorystart());
     }
   });
   // setShowInfo(0);
-  if (done && catas.length !== 0) {
-    catas.map((cata) => {
-      data.push({
-        value: cata._id,
-        label: cata.name,
-      });
+  // if (listCategory && catas.length !== 0) {
+  catas.map((cata) => {
+    data.push({
+      value: cata._id,
+      label: cata.name,
     });
-  }
+  });
+  // }
 
   const encodeFileBase64 = (file) => {
     var reader = new FileReader();
@@ -101,7 +104,14 @@ const ProductAddForm = ({handleSubmit, reset}) => {
           loading: true,
         });
         const response = await addproduct(token, tosenddata);
-        if (response.data.status) {
+        if (response.data.success) {
+          dispatch(addProductSuccess(response.data.data));
+          setconfig({
+            ...config,
+            loading: false,
+            error: null,
+          });
+          reset();
         } else {
           setconfig({
             ...config,
@@ -117,7 +127,6 @@ const ProductAddForm = ({handleSubmit, reset}) => {
           error: err.toString(),
         });
       }
-      // console.log('we are here ',image1);
     }
   };
   const chkdchild = (data) => {
@@ -132,7 +141,6 @@ const ProductAddForm = ({handleSubmit, reset}) => {
           label: s1.name,
         });
       });
-      // console.log(subArray)
     } else {
       setShowchildInfo(0);
     }
@@ -151,7 +159,6 @@ const ProductAddForm = ({handleSubmit, reset}) => {
           label: s1.name,
         });
       });
-      // console.log(subArray)
     } else {
       setShowInfo(0);
       setShowchildInfo(0);

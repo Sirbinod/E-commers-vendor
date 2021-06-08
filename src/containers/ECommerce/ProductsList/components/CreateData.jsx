@@ -1,10 +1,13 @@
-import React, {useMemo, useEffect} from "react";
+import React, {useMemo, useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
-import {getme, getmedeleted} from "../../../../redux/actions/itemActions";
+import {
+  deleteSuccess,
+  getme,
+  getmedeleted,
+} from "../../../../redux/actions/itemActions";
 import PropTypes from "prop-types";
 import {Link} from "react-router-dom";
 import {baseurl} from "../../../../utils/baseApi/baseapi";
-// import { Alert, Button } from 'reactstrap';
 
 const PhotoFormatter = (value) => (
   <div className="products-list__img-wrap">
@@ -24,12 +27,9 @@ const StatusFormatter = (value) =>
 StatusFormatter.propTypes = {
   value: PropTypes.string.isRequired,
 };
-//  alert(token)
-// fetchData(token)
-
-let data = [];
 
 const CreateDataProductListTable = () => {
+  let data = [];
   const CategoryFormatter = (value1, value2, value3) => {
     return (
       <div>
@@ -60,7 +60,6 @@ const CreateDataProductListTable = () => {
       to={`./product/${val}/edit`}
       className="btn btn-outline-primary btn-sm"
     >
-      {" "}
       <span className="lnr lnr-pencil"></span>
     </Link>,
     <button
@@ -77,31 +76,36 @@ const CreateDataProductListTable = () => {
   const dispatch = useDispatch();
 
   var token = localStorage.getItem("token");
-  // update this line
   const {done, items} = useSelector((state) => state.items);
 
-  useEffect(() => {
-    if (!done && items.length === 0) {
-      // api call
-      dispatch(getme(token));
-    }
+  // useEffect(() => {
+  //   if (!done && items.length === 0) {
+  //     dispatch(getme(token));
+  //   }
+  // });
+  const [deleteConfig, setdeleteConfig] = useState({
+    loading: false,
+    error: null,
   });
-  const deletechk = (e, idd) => {
+  const deletechk = async (e, idd) => {
     e.preventDefault();
-    // const idd = this.attr('id');
+    setdeleteConfig({loading: true, ...deleteConfig});
     const r = window.confirm("Do you really want to Delete?");
     if (r === true) {
       var token = localStorage.getItem("token");
       const reqtem = items.filter((item) => item._id === idd);
-      const slugdata = reqtem[0].slug;
-
-      dispatch(getmedeleted(token, slugdata));
-      // alert(idd);
+      const slugdata = reqtem[0]._id;
+      try {
+        await getmedeleted(token, slugdata);
+        dispatch(deleteSuccess(slugdata));
+        setdeleteConfig({loading: false, error: null});
+      } catch (err) {
+        setdeleteConfig({...deleteConfig, loading: false, error: err.toString});
+      }
     } else {
       alert("Cancelled");
     }
   };
-  console.log(items);
   if (done) {
     data = [];
     let coun = 1;
