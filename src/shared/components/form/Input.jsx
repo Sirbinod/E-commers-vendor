@@ -4,13 +4,19 @@ const Input = ({
   type,
   className,
   children,
-  meta: { touched, error },
+  defaultValue,
+  meta: {touched, error},
 }) => (
   <div className={`form__form-group-input-wrap ${className}`}>
     <div className="form__form-group-field">
       {children}
 
-      <input {...input} placeholder={placeholder} type={type} />
+      <input
+        {...input}
+        placeholder={placeholder}
+        defaultValue={defaultValue}
+        type={type}
+      />
     </div>
 
     {touched && error && (

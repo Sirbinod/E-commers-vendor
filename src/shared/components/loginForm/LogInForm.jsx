@@ -7,7 +7,7 @@ import KeyVariantIcon from "mdi-react/KeyVariantIcon";
 import AccountOutlineIcon from "mdi-react/AccountOutlineIcon";
 import {NavLink} from "react-router-dom";
 import PropTypes from "prop-types";
-import {Alert, Button} from "reactstrap";
+import {Button} from "reactstrap";
 import renderCheckBoxField from "../form/CheckBox";
 import {login, loginchk, authError} from "../../../redux/actions/loginActions";
 import {withTheme} from "@material-ui/core";
@@ -37,7 +37,7 @@ const LogInForm = ({fieldUser, typeFieldUser, form, handleSubmit}) => {
         localStorage.setItem("loginsuccess", res.data.success);
         return true;
       } else {
-        showNotification("ltr", "danger", res, "Login Fail");
+        showNotification("ltr", "danger", res.data.message, "Login Fail");
         return false;
       }
     } catch (error) {}

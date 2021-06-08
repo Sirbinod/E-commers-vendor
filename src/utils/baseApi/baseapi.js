@@ -1,4 +1,4 @@
-export const baseurl = "https://api.cloudpasal.com/";
+export const baseurl = "https://api.cloudpasal.com";
 
 export const baseapi = `${baseurl}/api/v1/vendor`;
 
@@ -12,7 +12,7 @@ export const itemscreateapi = `${baseapi}/product/create`;
 
 export const itemeditapi = `${baseapi}/product/`;
 
-export const itemdeleteapi = (slug) => `${baseapi}/product/` + slug + `/delete`;
+export const itemdeleteapi = `${baseapi}/product/`;
 
 export const orderlistapi = `${baseapi}/order/list`;
 

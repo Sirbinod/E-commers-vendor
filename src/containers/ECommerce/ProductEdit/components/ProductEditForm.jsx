@@ -8,13 +8,15 @@ import {useDispatch, useSelector, connect} from "react-redux";
 import renderDropZoneMultipleField from "../../../../shared/components/form/DropZoneMultiple";
 import renderSelectField from "../../../../shared/components/form/Select";
 import {getcategorystart} from "../../../../redux/actions/categoryActions";
-import {addproduct} from "../../../../redux/actions/itemActions";
+import {addproduct, updateProduct} from "../../../../redux/actions/itemActions";
 import renderDropZoneField from "../../../../shared/components/form/DropZone";
 import CKEditor from "ckeditor4-react";
 import Input from "../../../../shared/components/form/Input";
 import validate from "./validation";
+import {useParams} from "react-router";
 
 const ProductAddForm = ({handleSubmit, reset}) => {
+  const {id} = useParams();
   const dispatch = useDispatch();
   let data = [];
   const {done, catas, listCategory} = useSelector((state) => state.catas);
@@ -26,6 +28,9 @@ const ProductAddForm = ({handleSubmit, reset}) => {
   const [showchildInfo, setShowchildInfo] = useState("");
   const [descr, setDescr] = useState("");
   const [config, setconfig] = useState({loading: false, error: null});
+  const {items} = useSelector((state) => state.items);
+
+  const fitterItem = items.filter((item) => item._id === id)[0];
 
   useEffect(() => {
     if (!listCategory) {
@@ -50,12 +55,10 @@ const ProductAddForm = ({handleSubmit, reset}) => {
       reader.readAsDataURL(file);
       reader.onload = () => {
         var Base64 = reader.result;
-        // console.log(Base64);
+
         setFileBase64String(Base64);
       };
-      reader.onerror = (error) => {
-        console.log("error: ", error);
-      };
+      reader.onerror = (error) => {};
     }
   };
   const onEditorChange = (evt) => {
@@ -86,8 +89,8 @@ const ProductAddForm = ({handleSubmit, reset}) => {
         sku: data.sku,
         price: data.price,
         mainCategory: data.mainCategory.value,
-        subCategory: data.subCategory ? data.subCategory.value : "",
-        childCategory: data.childCategory ? data.childCategory.value : "",
+        subCategory: data.subCategory ? data.subCategory.value : null,
+        childCategory: data.childCategory ? data.childCategory.value : null,
         discount: data.discount,
         stock: parseInt(data.stock),
         brand: data.brand,
@@ -95,14 +98,16 @@ const ProductAddForm = ({handleSubmit, reset}) => {
         gallery: arr2,
         tags: data.tags,
         description: descr,
+        publish: false,
       };
       try {
         setconfig({
           ...config,
           loading: true,
         });
-        const response = await addproduct(token, tosenddata);
+        const response = await updateProduct(token, tosenddata, id);
         if (response.data.status) {
+          dispatch(updateProduct(response.data));
         } else {
           setconfig({
             ...config,
@@ -110,6 +115,7 @@ const ProductAddForm = ({handleSubmit, reset}) => {
             error: response.data.message,
           });
         }
+        reset();
       } catch (err) {
         setconfig({
           ...config,
@@ -163,25 +169,22 @@ const ProductAddForm = ({handleSubmit, reset}) => {
     onChange,
     meta: {touched, error},
   }) => {
-    console.log(error);
-    return (
-      <>
-        <div className="col-md-12">
-          <CKEditor name={name} onChange={onEditorChange} />
-        </div>
+    <>
+      <div className="col-md-12">
+        <CKEditor name={name} onChange={onEditorChange} />
+      </div>
 
-        {touched && error && (
-          <span
-            style={{
-              marginTop: "100px",
-            }}
-            className="form__form-group-error"
-          >
-            {error}
-          </span>
-        )}
-      </>
-    );
+      {touched && error && (
+        <span
+          style={{
+            marginTop: "100px",
+          }}
+          className="form__form-group-error"
+        >
+          {error}
+        </span>
+      )}
+    </>;
   };
 
   return (
@@ -189,22 +192,38 @@ const ProductAddForm = ({handleSubmit, reset}) => {
       <div className="form__half">
         <div className="form__form-group">
           <span className="form__form-group-label">Product Name</span>
-          <Field name={"name"} component={Input} />
+          <Field
+            name={"name"}
+            defaultValue={fitterItem.name}
+            component={Input}
+          />
         </div>
         <div className="form__form-group-id-category">
           <div className="form__form-group form__form-group-id">
             <span className="form__form-group-label">SKU</span>
-            <Field name={"sku"} component={Input} />
+            <Field
+              name={"sku"}
+              defaultValue={fitterItem.sku}
+              component={Input}
+            />
           </div>
           <div className="form__form-group form__form-group-id">
             <span className="form__form-group-label">Short Name</span>
-            <Field name={"shortname"} component={Input} />
+            <Field
+              name={"shortname"}
+              defaultValue={fitterItem.shortname}
+              component={Input}
+            />
           </div>
         </div>
         <div className="form__form-group-price-discount">
           <div className="form__form-group form__form-group-price">
             <span className="form__form-group-label">Price</span>
-            <Field name={"price"} component={Input}>
+            <Field
+              name={"price"}
+              defaultValue={fitterItem.price}
+              component={Input}
+            >
               <div className="form__form-group-icon">
                 <CurrencyUsdIcon />
               </div>
@@ -212,7 +231,11 @@ const ProductAddForm = ({handleSubmit, reset}) => {
           </div>
           <div className="form__form-group">
             <span className="form__form-group-label">Brand</span>
-            <Field name={"brand"} component={Input} />
+            <Field
+              name={"brand"}
+              defaultValue={fitterItem.brand}
+              component={Input}
+            />
           </div>
         </div>
         <div className="form__form-group">
@@ -262,12 +285,17 @@ const ProductAddForm = ({handleSubmit, reset}) => {
         <div className="form__form-group-price-discount">
           <div className="form__form-group form__form-group-price">
             <span className="form__form-group-label">Stock</span>
-            <Field name={"stock"} component={Input} />
+            <Field
+              name={"stock"}
+              defaultValue={fitterItem.stock}
+              component={Input}
+            />
           </div>
           <div className="form__form-group">
             <span className="form__form-group-label">Discount</span>
             <Field
               name={"discount"}
+              defaultValue={fitterItem.discount}
               className="form__form-group-price"
               component={Input}
             >
@@ -282,6 +310,7 @@ const ProductAddForm = ({handleSubmit, reset}) => {
           <span className="form__form-group-label">Tags</span>
           <Field
             name={"tags"}
+            defaultValue={fitterItem.tags}
             className="form__form-group-price"
             component={Input}
           />
@@ -291,7 +320,11 @@ const ProductAddForm = ({handleSubmit, reset}) => {
         <div className="form__form-group" style={{height: "10%"}}>
           <span className="form__form-group-label">Image</span>
           <div className="form__form-group-field">
-            <Field name="image" component={renderDropZoneField} />
+            <Field
+              name="image"
+              defaultValue={fitterItem.image}
+              component={renderDropZoneField}
+            />
           </div>
         </div>
       </div>
@@ -299,7 +332,11 @@ const ProductAddForm = ({handleSubmit, reset}) => {
         <div className="form__form-group">
           <span className="form__form-group-label">Description</span>
 
-          <CKEditor name="myeditor" onChange={onEditorChange} />
+          <CKEditor
+            name="myeditor"
+            defaultValue={fitterItem.description}
+            onChange={onEditorChange}
+          />
           {!descr && (
             <span className="form__form-group-error">
               Description is required
@@ -311,7 +348,11 @@ const ProductAddForm = ({handleSubmit, reset}) => {
         <div className="form__form-group">
           <span className="form__form-group-label">Gallery</span>
           <div className="form__form-group-field">
-            <Field name="gallery" component={renderDropZoneMultipleField} />
+            <Field
+              name="gallery"
+              defaultValue={fitterItem.gallery}
+              component={renderDropZoneMultipleField}
+            />
           </div>
         </div>
       </div>

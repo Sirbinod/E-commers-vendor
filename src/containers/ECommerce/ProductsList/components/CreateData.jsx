@@ -1,9 +1,13 @@
-import React, { useMemo, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { getme, getmedeleted } from "../../../../redux/actions/itemActions";
+import React, {useMemo, useEffect, useState} from "react";
+import {useDispatch, useSelector} from "react-redux";
+import {
+  deleteSuccess,
+  getme,
+  getmedeleted,
+} from "../../../../redux/actions/itemActions";
 import PropTypes from "prop-types";
-import { Link } from "react-router-dom";
-import { baseurl } from "../../../../utils/baseApi/baseapi";
+import {Link} from "react-router-dom";
+import {baseurl} from "../../../../utils/baseApi/baseapi";
 
 const PhotoFormatter = (value) => (
   <div className="products-list__img-wrap">
@@ -29,16 +33,13 @@ const CreateDataProductListTable = () => {
   const CategoryFormatter = (value1, value2, value3) => {
     return (
       <div>
-        <span className="badge badge-primary" style={{ "margin-left": "10px" }}>
+        <span className="badge badge-primary" style={{"margin-left": "10px"}}>
           {value1}
         </span>
-        <span
-          className="badge badge-secondary"
-          style={{ "margin-left": "10px" }}
-        >
+        <span className="badge badge-secondary" style={{"margin-left": "10px"}}>
           {value2}
         </span>
-        <span className="badge badge-success" style={{ "margin-left": "10px" }}>
+        <span className="badge badge-success" style={{"margin-left": "10px"}}>
           {value3}
         </span>
       </div>
@@ -59,7 +60,6 @@ const CreateDataProductListTable = () => {
       to={`./product/${val}/edit`}
       className="btn btn-outline-primary btn-sm"
     >
-      {" "}
       <span className="lnr lnr-pencil"></span>
     </Link>,
     <button
@@ -76,22 +76,32 @@ const CreateDataProductListTable = () => {
   const dispatch = useDispatch();
 
   var token = localStorage.getItem("token");
-  const { done, items } = useSelector((state) => state.items);
+  const {done, items} = useSelector((state) => state.items);
 
   // useEffect(() => {
   //   if (!done && items.length === 0) {
   //     dispatch(getme(token));
   //   }
   // });
-  const deletechk = (e, idd) => {
+  const [deleteConfig, setdeleteConfig] = useState({
+    loading: false,
+    error: null,
+  });
+  const deletechk = async (e, idd) => {
     e.preventDefault();
+    setdeleteConfig({loading: true, ...deleteConfig});
     const r = window.confirm("Do you really want to Delete?");
     if (r === true) {
       var token = localStorage.getItem("token");
       const reqtem = items.filter((item) => item._id === idd);
-      const slugdata = reqtem[0].slug;
-
-      dispatch(getmedeleted(token, slugdata));
+      const slugdata = reqtem[0]._id;
+      try {
+        await getmedeleted(token, slugdata);
+        dispatch(deleteSuccess(slugdata));
+        setdeleteConfig({loading: false, error: null});
+      } catch (err) {
+        setdeleteConfig({...deleteConfig, loading: false, error: err.toString});
+      }
     } else {
       alert("Cancelled");
     }

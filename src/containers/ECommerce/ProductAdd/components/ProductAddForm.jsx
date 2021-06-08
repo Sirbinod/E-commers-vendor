@@ -8,7 +8,10 @@ import {useDispatch, useSelector} from "react-redux";
 import renderDropZoneMultipleField from "../../../../shared/components/form/DropZoneMultiple";
 import renderSelectField from "../../../../shared/components/form/Select";
 import {getcategorystart} from "../../../../redux/actions/categoryActions";
-import {addproduct} from "../../../../redux/actions/itemActions";
+import {
+  addproduct,
+  addProductSuccess,
+} from "../../../../redux/actions/itemActions";
 import renderDropZoneField from "../../../../shared/components/form/DropZone";
 import CKEditor from "ckeditor4-react";
 import Input from "../../../../shared/components/form/Input";
@@ -101,7 +104,14 @@ const ProductAddForm = ({handleSubmit, reset}) => {
           loading: true,
         });
         const response = await addproduct(token, tosenddata);
-        if (response.data.status) {
+        if (response.data.success) {
+          dispatch(addProductSuccess(response.data.data));
+          setconfig({
+            ...config,
+            loading: false,
+            error: null,
+          });
+          reset();
         } else {
           setconfig({
             ...config,
