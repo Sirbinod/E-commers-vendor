@@ -2,7 +2,7 @@ import React from "react";
 import Dropzone from "react-dropzone";
 import PropTypes from "prop-types";
 
-const DropZoneMultipleField = ({name, value, onChange}) => {
+const DropZoneMultipleField = ({ name, value, onChange }) => {
   const files = value;
   const onDrop = (onDropFiles) => {
     onChange(
@@ -28,7 +28,7 @@ const DropZoneMultipleField = ({name, value, onChange}) => {
           onDrop(value ? value.concat(filesToUpload) : filesToUpload);
         }}
       >
-        {({getRootProps, getInputProps}) => (
+        {({ getRootProps, getInputProps }) => (
           <div {...getRootProps()} className="dropzone__input">
             {(!files || files.length === 0) && (
               <div className="dropzone__drop-here">
@@ -45,7 +45,7 @@ const DropZoneMultipleField = ({name, value, onChange}) => {
             <div
               className="dropzone__img"
               key={file.i}
-              style={{backgroundImage: `url(${file.preview})`}}
+              style={{ backgroundImage: `url(${file.preview || file})` }}
             >
               <p className="dropzone__img-name">{file.name}</p>
               <button
@@ -77,7 +77,7 @@ DropZoneMultipleField.propTypes = {
   ]).isRequired,
 };
 
-const renderDropZoneMultipleField = ({input}) => (
+const renderDropZoneMultipleField = ({ input }) => (
   <DropZoneMultipleField {...input} />
 );
 

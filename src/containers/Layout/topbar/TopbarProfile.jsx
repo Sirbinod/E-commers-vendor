@@ -1,12 +1,12 @@
-import React, { useState } from "react";
+import React, {useState} from "react";
 import DownIcon from "mdi-react/ChevronDownIcon";
-import { Collapse } from "reactstrap";
+import {Collapse} from "reactstrap";
 import TopbarMenuLink from "./TopbarMenuLink";
-import { useSelector } from "react-redux";
+import {useSelector} from "react-redux";
 
 const Ava = `${process.env.PUBLIC_URL}/img/ava.png`;
 
-const TopbarProfile = ({ auth0, user }) => {
+const TopbarProfile = ({auth0, user}) => {
   const [isCollapsed, setIsCollapsed] = useState(false);
 
   const toggleProfile = () => {
@@ -19,7 +19,7 @@ const TopbarProfile = ({ auth0, user }) => {
   };
   let userimg = "";
   let username = "";
-  const { id, loggedIn } = useSelector((state) => state.login);
+  const {id, loggedIn} = useSelector((state) => state.login);
   if (loggedIn === true) {
     userimg =
       "https://cdn2.iconfinder.com/data/icons/various-people-avatars-solid/128/salesman_vendor_dealer_vender_marketeer_monger_business-man_broker_-512.png";
@@ -59,20 +59,13 @@ const TopbarProfile = ({ auth0, user }) => {
             path="/account/profile"
             onClick={toggleProfile}
           />
-          {/* <TopbarMenuLink
-            title="Lock Screen"
-            icon="lock"
-            path="/lock_screen"
+          <TopbarMenuLink
+            title="Profile Update"
+            icon="undo"
+            path="/account/profilr_update"
             onClick={toggleProfile}
-          /> */}
-          {
-            <TopbarMenuLink
-              title="Log Out Auth0"
-              icon="exit"
-              path="/log_in"
-              // onClick={auth0.logout}
-            />
-          }
+          />
+          {}
           <TopbarMenuLink
             title="Log Out"
             icon="exit"

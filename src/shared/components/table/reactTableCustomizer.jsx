@@ -1,6 +1,6 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
-import {Row, Collapse, UncontrolledTooltip} from "reactstrap";
+import { Row, Collapse, UncontrolledTooltip } from "reactstrap";
 import DownIcon from "mdi-react/ChevronDownIcon";
 import ReactTableCustomizerToggle from "./ReactTableCustomizerToggle";
 
@@ -81,7 +81,7 @@ const ReactTableCustomizer = ({
     <Row className="react-table__customizer">
       <div className="table__collapse">
         <button className="table__btn" type="button" onClick={handleOpen}>
-          <h5>Table customizer</h5>
+          {/* <h5>Table customizer</h5> */}
           <DownIcon className="table__icon" />
         </button>
         {collapse && (

@@ -1,13 +1,12 @@
 import React, {useEffect, useState} from "react";
-import PropTypes from "prop-types";
 import {Button, ButtonToolbar} from "reactstrap";
 import {Field, reduxForm} from "redux-form";
-import CurrencyUsdIcon from "mdi-react/CurrencyUsdIcon";
 import TagIcon from "mdi-react/TagIcon";
 import {useDispatch, useSelector} from "react-redux";
 import renderDropZoneMultipleField from "../../../../shared/components/form/DropZoneMultiple";
 import renderSelectField from "../../../../shared/components/form/Select";
 import {getcategorystart} from "../../../../redux/actions/categoryActions";
+// import jimp from "jimp";
 import {
   addproduct,
   addProductSuccess,
@@ -16,12 +15,13 @@ import renderDropZoneField from "../../../../shared/components/form/DropZone";
 import CKEditor from "ckeditor4-react";
 import Input from "../../../../shared/components/form/Input";
 import validate from "./validation";
+// import imageToBase64 from "image-to-base64";
 
 const ProductAddForm = ({handleSubmit, reset}) => {
   const dispatch = useDispatch();
   let data = [];
   const {done, catas, listCategory} = useSelector((state) => state.catas);
-  const [fileBase64String, setFileBase64String] = useState("");
+
   const [subCategory, setSubcategory] = useState([]);
   const [childCategory, setChildcategory] = useState([]);
   const [subdata, setSubdata] = useState([]);
@@ -32,101 +32,85 @@ const ProductAddForm = ({handleSubmit, reset}) => {
 
   useEffect(() => {
     if (!listCategory) {
-      // api call
       dispatch(getcategorystart());
     }
   });
-  // setShowInfo(0);
-  // if (listCategory && catas.length !== 0) {
+
   catas.map((cata) => {
     data.push({
       value: cata._id,
       label: cata.name,
     });
   });
-  // }
 
-  const encodeFileBase64 = (file) => {
-    var reader = new FileReader();
-    if (file) {
+  const getBase64 = (file) => {
+    return new Promise((resolve) => {
+      let baseURL = "";
+      let reader = new FileReader();
       reader.readAsDataURL(file);
       reader.onload = () => {
-        var Base64 = reader.result;
-        // console.log(Base64);
-        setFileBase64String(Base64);
+        baseURL = reader.result;
+        resolve(baseURL.split(";base64,")[1]);
       };
-      reader.onerror = (error) => {
-        console.log("error: ", error);
-      };
-    }
+    });
   };
   const onEditorChange = (evt) => {
     setDescr(evt.editor.getData());
   };
+
   const Productadder = async (data) => {
-    // const desc = data.myeditor;
+    // console.log(data);
+    try {
+      setconfig({
+        ...config,
+        loading: true,
+      });
 
-    const file = data.image[0];
-    encodeFileBase64(file);
-    const nd = fileBase64String.split(";base64,");
-    const imagess = nd[1];
+      Promise.all(data.gallery.map((x) => getBase64(x))).then((list) => {
+        getBase64(data.image[0]).then(async (imageString) => {
+          const token = localStorage.getItem("token");
+          const tosenddata = {
+            name: data.name,
+            shortname: data.shortname,
+            sku: data.sku,
+            price: data.price,
+            mainCategory: data.mainCategory.value,
+            subCategory: data.subCategory ? data.subCategory.value : "",
+            childCategory: data.childCategory ? data.childCategory.value : "",
+            discount: data.discount,
+            stock: parseInt(data.stock),
+            brand: data.brand,
+            image: imageString,
+            gallery: list,
+            tags: data.tags,
+            description: descr,
+          };
 
-    const file2 = data.gallery;
-    const arr2 = [];
-    file2.map((file22) => {
-      encodeFileBase64(file22);
-      const nd = fileBase64String.split(";base64,");
-      arr2.push(nd[1]);
-    });
-
-    if (!imagess == "" && arr2 != []) {
-      const token = localStorage.getItem("token");
-
-      const tosenddata = {
-        name: data.name,
-        shortname: data.shortname,
-        sku: data.sku,
-        price: data.price,
-        mainCategory: data.mainCategory.value,
-        subCategory: data.subCategory ? data.subCategory.value : "",
-        childCategory: data.childCategory ? data.childCategory.value : "",
-        discount: data.discount,
-        stock: parseInt(data.stock),
-        brand: data.brand,
-        image: imagess,
-        gallery: arr2,
-        tags: data.tags,
-        description: descr,
-      };
-      try {
-        setconfig({
-          ...config,
-          loading: true,
+          const response = await addproduct(token, tosenddata);
+          if (response.data.success) {
+            dispatch(addProductSuccess(response.data.data));
+            setconfig({
+              ...config,
+              loading: false,
+              error: null,
+            });
+            reset();
+          } else {
+            setconfig({
+              ...config,
+              loading: false,
+              error: response.data.message,
+            });
+          }
         });
-        const response = await addproduct(token, tosenddata);
-        if (response.data.success) {
-          dispatch(addProductSuccess(response.data.data));
-          setconfig({
-            ...config,
-            loading: false,
-            error: null,
-          });
-          reset();
-        } else {
-          setconfig({
-            ...config,
-            loading: false,
-            error: response.data.message,
-          });
-        }
-      } catch (err) {
-        setconfig({
-          ...config,
+      });
+    } catch (err) {
+      setconfig({
+        ...config,
 
-          loading: false,
-          error: err.toString(),
-        });
-      }
+        loading: false,
+        error: err.toString(),
+      });
     }
   };
   const chkdchild = (data) => {
@@ -215,7 +199,7 @@ const ProductAddForm = ({handleSubmit, reset}) => {
             <span className="form__form-group-label">Price</span>
             <Field name={"price"} component={Input}>
               <div className="form__form-group-icon">
-                <CurrencyUsdIcon />
+                <span style={{color: "grey"}}>रू</span>
               </div>
             </Field>
           </div>

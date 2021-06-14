@@ -1,4 +1,3 @@
-import context from "react-bootstrap/esm/AccordionContext";
 import {
   SITEM_START,
   LOAD_NEW_ITEMS,
@@ -14,6 +13,7 @@ const initialState = {
   done: false,
   process: null,
   listItems: false,
+  getItem: (itemId) => this.items.filter((i) => i._id === itemId)[0],
 };
 const updateobject = (oldState, newState) => {
   return {...oldState, ...newState};
@@ -25,6 +25,7 @@ const itemReducer = (state = initialState, action) => {
       return updateobject(state, {
         loading: true,
         listItems: true,
+        items: [],
       });
     case LOAD_NEW_ITEMS:
       if (state.done === false) {
@@ -34,20 +35,33 @@ const itemReducer = (state = initialState, action) => {
           done: true,
         });
       } else {
-        return state;
+        return {...state, items: []};
       }
 
     case UPDATE_NEW_ITEMS:
       const newItems = [...state.items];
-      const updatedItems = newItems.find((x) => x._id === action.payload._id);
-      const currentItemIndex = newItems.indexOf(updatedItems);
+      console.log("========================");
+      console.log(newItems);
+      console.log("========================");
+
+      // const newItem.push(action.payload);
+      const updatedItems = newItems.findIndex(
+        (x) => x._id === action.payload._id
+      );
+
+      console.log("========================");
+      console.log(updatedItems);
+      console.log("========================");
+
+      // const currentItemIndex = newItems.indexOf(updatedItems);
+      // newItems.remove(updatedItems);
+
       const newItem = action.payload;
-      newItems[currentItemIndex] = newItem;
+      newItems[updatedItems] = newItem;
       return {
         ...state,
         loading: false,
-        items: [...updatedItems],
-        message: "We are ready to update",
+        items: [...newItems],
       };
     case DELETE_NEW_ITEMS:
       return {
@@ -61,7 +75,6 @@ const itemReducer = (state = initialState, action) => {
       const toDelete = initialState.find((x) => x._id === action.payload)[0];
       const indexToDelete = initialState.indexOf(toDelete);
       toDelete.splice(indexToDelete);
-      window.location.reload();
       return {
         ...state,
         items: [...initialState],
@@ -70,6 +83,7 @@ const itemReducer = (state = initialState, action) => {
       const initProduct = [...state.items];
       initProduct.push(action.payload);
       return {...state, items: [...initProduct]};
+
     default:
       return state;
   }

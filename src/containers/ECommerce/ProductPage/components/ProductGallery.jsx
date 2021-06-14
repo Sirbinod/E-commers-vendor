@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
-import PropTypes from 'prop-types';
-import { Modal } from 'reactstrap';
-import Carousel from '@brainhubeu/react-carousel';
-import ChevronLeftIcon from 'mdi-react/ChevronLeftIcon';
-import ChevronRightIcon from 'mdi-react/ChevronRightIcon';
-import '@brainhubeu/react-carousel/lib/style.css';
+import React, { useState } from "react";
+import PropTypes from "prop-types";
+import { Modal } from "reactstrap";
+import Carousel from "@brainhubeu/react-carousel";
+import ChevronLeftIcon from "mdi-react/ChevronLeftIcon";
+import ChevronRightIcon from "mdi-react/ChevronRightIcon";
+import "@brainhubeu/react-carousel/lib/style.css";
 
 const ProductGallery = ({ images }) => {
   const [isOpenLightbox, setIsOpenLightbox] = useState(false);
@@ -43,7 +43,11 @@ const ProductGallery = ({ images }) => {
         className="product-gallery__current-img"
         onClick={() => openLightbox(currentImage)}
       >
-        <img src={images[currentImagePreview].src} alt={images[currentImagePreview].src} />
+        <img
+          src={images[currentImagePreview].src}
+          alt={images[currentImagePreview].src}
+          style={{ objectFit: "contain" }}
+        />
       </button>
       <div className="product_gallery__gallery">
         {images.map((item, index) => (
@@ -53,7 +57,11 @@ const ProductGallery = ({ images }) => {
             onClick={() => changeImg(index)}
             className="product-gallery__img-preview"
           >
-            <img src={item.src} alt={item.src} />
+            <img
+              src={item.src}
+              alt={item.src}
+              style={{ objectFit: "contain" }}
+            />
           </button>
         ))}
       </div>
@@ -74,25 +82,25 @@ const ProductGallery = ({ images }) => {
           <Carousel
             value={currentImage}
             onChange={onChange}
-            slides={
-              carouselImages.map(item => (
-                <img key={`index_${item.src}`} src={item.src} alt="" />
-              ))
-            }
+            slides={carouselImages.map((item) => (
+              <img key={`index_${item.src}`} src={item.src} alt="" />
+            ))}
             addArrowClickHandler
-            arrowLeft={(
+            arrowLeft={
               <div className="modal__btn">
                 <ChevronLeftIcon className="modal__btn_left" />
               </div>
-            )}
-            arrowRight={(
+            }
+            arrowRight={
               <div className="modal__btn">
                 <ChevronRightIcon className="modal__btn_right" />
               </div>
-            )}
+            }
           />
           <div className="modal__footer">
-            <p>{currentImage + 1} of {carouselImages.length}</p>
+            <p>
+              {currentImage + 1} of {carouselImages.length}
+            </p>
           </div>
         </div>
       </Modal>
@@ -101,9 +109,11 @@ const ProductGallery = ({ images }) => {
 };
 
 ProductGallery.propTypes = {
-  images: PropTypes.arrayOf(PropTypes.shape({
-    src: PropTypes.string,
-  })).isRequired,
+  images: PropTypes.arrayOf(
+    PropTypes.shape({
+      src: PropTypes.string,
+    })
+  ).isRequired,
 };
 
 export default ProductGallery;

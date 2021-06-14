@@ -23,6 +23,20 @@ const validate = (values) => {
   } else if (values.password.length < 3) {
     errors.password = "The password should be greater than 4";
   }
+  if (!values.oldPassword) {
+    errors.oldPassword = "Old Password field shouldn’t be empty";
+  } else if (values.oldPassword.length < 3) {
+    errors.oldPassword = "The old password should be greater than 4";
+  }
+  if (!values.newPassword) {
+    errors.newPassword = "New Password field shouldn’t be empty";
+  } else if (values.newPassword.length < 3) {
+    errors.newPassword = "The new password should be greater than 4";
+  }
+  if (values.confirmNewPassword !== values.newPassword) {
+    errors.confirmNewPassword =
+      "New Password and consform password shouldn be same";
+  }
   if (!values.select) {
     errors.select = "Please select the option";
   }

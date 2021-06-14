@@ -28,6 +28,7 @@ const ECommerceDashboard = ({
 
   useEffect(() => {
     if (!done && datatoput.length === 0) {
+      console.log();
       // api call
       dispatch(getdatasstart(token));
     }
@@ -44,17 +45,19 @@ const ECommerceDashboard = ({
   let compord = 0;
   let reford = 0;
   if (done && !loading) {
-    amt = datatoput.totalProducts;
-    pamt = datatoput.pendingProducts;
-    aamt = datatoput.approvedProducts;
-    samt = datatoput.suspendedProducts;
-    tord = datatoput.totalOrders;
-    pord = datatoput.pendingOrders;
-    cord = datatoput.cancelledOrders;
-    dord = datatoput.declinedOrders;
-    sord = datatoput.shippedOrders;
-    compord = datatoput.completedOrders;
-    reford = datatoput.refundedOrders;
+    if (datatoput) {
+      amt = datatoput.totalProducts || 0;
+      pamt = datatoput.pendingProducts || 0;
+      aamt = datatoput.approvedProducts || 0;
+      samt = datatoput.suspendedProducts || 0;
+      tord = datatoput.totalOrders || 0;
+      pord = datatoput.pendingOrders || 0;
+      cord = datatoput.cancelledOrders || 0;
+      dord = datatoput.declinedOrders || 0;
+      sord = datatoput.shippedOrders || 0;
+      compord = datatoput.completedOrders || 0;
+      reford = datatoput.refundedOrders || 0;
+    }
   }
 
   return (

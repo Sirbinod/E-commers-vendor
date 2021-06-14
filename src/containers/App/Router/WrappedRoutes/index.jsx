@@ -10,8 +10,8 @@ export default () => (
     <Layout />
     <div className="container__wrap">
       <Route path="/account" component={Account} />
-      <Route path="/e_commerce_dashboard" component={ECommerceDashboard} />
       <Route path="/e-commerce" component={ECommerce} />
+      <Route path="/" exact component={ECommerceDashboard} />
     </div>
   </div>
 );

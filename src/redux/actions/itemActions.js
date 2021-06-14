@@ -35,13 +35,12 @@ function loaditem(items) {
   };
 }
 
-function updateitem(data, index) {
+export const updateitem = (data) => {
   return {
     type: UPDATE_NEW_ITEMS,
-    data,
-    index,
+    payload: data,
   };
-}
+};
 
 function deleteitem(id) {
   return {
@@ -49,13 +48,9 @@ function deleteitem(id) {
     id,
   };
 }
-// function deleteSuccess(id) {
-//   return {
-//     type: DELETE_SUCCEESS,
-//     payload: id,
-//   };
-// }
+
 export const deleteSuccess = (id) => {
+  console.log(id, "ehile log info with dot dto");
   return {
     type: DELETE_SUCCEESS,
     payload: id,
@@ -107,6 +102,7 @@ export const updateProduct = (token, data, id) => {
     headers: {Authorization: "Bearer " + token},
   });
 };
+
 export const getmedeleted = (token, slug) => {
   // dispatch(itemchkStart());
   return axios({
@@ -114,8 +110,4 @@ export const getmedeleted = (token, slug) => {
     url: itemdeleteapi + slug + `/delete`,
     headers: {Authorization: "Bearer " + token},
   });
-  // .then(function (response) {
-  //   alert(response.data.message);
-  // })
-  // .catch(function (error) {});
 };

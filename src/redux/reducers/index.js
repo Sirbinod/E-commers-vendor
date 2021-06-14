@@ -1,4 +1,4 @@
-import { combineReducers } from "redux";
+import {combineReducers} from "redux";
 import appConfigReducer from "../../redux/reducers/appConfigReducer";
 import authReducer from "./authReducer";
 import themeReducer from "./themeReducer";
@@ -10,11 +10,12 @@ import customizerReducer from "./customizerReducer";
 import loginReducer from "./loginReducer";
 import itemReducer from "./itemReducer";
 import orderReducer from "./orderReducer";
-import { reducer as reduxFormReducer } from "redux-form";
+import {reducer as reduxFormReducer} from "redux-form";
 import userReducer from "./userReducer";
 import vendorsReducer from "./vendorReducer";
 import categoryReducer from "./categoryReducer";
 import dashboardReducer from "./dashboardRedcer";
+import profileReducer from "./profile";
 
 const reducer = combineReducers({
   form: reduxFormReducer, // mounted under "form",
@@ -33,6 +34,7 @@ const reducer = combineReducers({
   items: itemReducer,
   catas: categoryReducer,
   dashboard: dashboardReducer,
+  profile: profileReducer,
 });
 
 export default reducer;

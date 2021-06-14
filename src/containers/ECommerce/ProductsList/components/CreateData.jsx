@@ -1,8 +1,7 @@
 import React, {useMemo, useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {
-  deleteSuccess,
-  getme,
+  DELETE_SUCCEESS,
   getmedeleted,
 } from "../../../../redux/actions/itemActions";
 import PropTypes from "prop-types";
@@ -10,8 +9,11 @@ import {Link} from "react-router-dom";
 import {baseurl} from "../../../../utils/baseApi/baseapi";
 
 const PhotoFormatter = (value) => (
-  <div className="products-list__img-wrap">
-    <img src={value} alt="" />
+  <div
+    className="products-list__img-wrap"
+    style={{width: "50px", height: "100px"}}
+  >
+    <img src={value} alt="" style={{width: "50px", height: "100px"}} />
   </div>
 );
 
@@ -45,9 +47,6 @@ const CreateDataProductListTable = () => {
       </div>
     );
   };
-  CategoryFormatter.propTypes = {
-    value: PropTypes.string || null,
-  };
 
   const ActionFormatter = (val) => [
     <Link
@@ -70,37 +69,44 @@ const CreateDataProductListTable = () => {
       <span className="lnr lnr-trash"></span>
     </button>,
   ];
-  ActionFormatter.propTypes = {
-    value: PropTypes.string.isRequired,
-  };
+
   const dispatch = useDispatch();
 
-  var token = localStorage.getItem("token");
   const {done, items} = useSelector((state) => state.items);
 
-  // useEffect(() => {
-  //   if (!done && items.length === 0) {
-  //     dispatch(getme(token));
-  //   }
-  // });
+  const [init, setInit] = useState({product: [...items]});
   const [deleteConfig, setdeleteConfig] = useState({
     loading: false,
     error: null,
   });
   const deletechk = async (e, idd) => {
-    e.preventDefault();
+    // e.preventDefault();
     setdeleteConfig({loading: true, ...deleteConfig});
     const r = window.confirm("Do you really want to Delete?");
     if (r === true) {
       var token = localStorage.getItem("token");
-      const reqtem = items.filter((item) => item._id === idd);
+      const reqtem = init.product.filter((item) => item._id === idd);
+      const delIndex = init.product.indexOf(reqtem);
       const slugdata = reqtem[0]._id;
       try {
         await getmedeleted(token, slugdata);
-        dispatch(deleteSuccess(slugdata));
+        let newProduct = init.product;
+        newProduct = newProduct.splice(delIndex);
+        setInit({product: [...newProduct]});
+        console.log(newProduct, "which on ");
+
+        dispatch(() => {
+          return {type: DELETE_SUCCEESS, payload: slugdata};
+        });
+
         setdeleteConfig({loading: false, error: null});
       } catch (err) {
-        setdeleteConfig({...deleteConfig, loading: false, error: err.toString});
+        console.log(err);
+        setdeleteConfig({
+          ...deleteConfig,
+          loading: false,
+          error: err.toString,
+        });
       }
     } else {
       alert("Cancelled");
@@ -109,25 +115,27 @@ const CreateDataProductListTable = () => {
   if (done) {
     data = [];
     let coun = 1;
-    items.map((item) => {
-      data.push({
-        id: coun.toString(),
-        photo: PhotoFormatter(baseurl + item.image),
-        name: item.name,
-        quantity: item.stock.toString(),
-        article: item.sku,
-        price: item.price.toString(),
-        categorymain: CategoryFormatter(
-          item.mainCategory ? item.mainCategory.name : null,
-          item.subCategory ? item.subCategory.name : null,
-          item.childCategory ? item.childCategory.name : null
-        ),
-        status: StatusFormatter(item.status),
-        actionn: [ActionFormatter(item._id)],
+    if (init.product) {
+      init.product.map((item) => {
+        data.push({
+          id: coun.toString(),
+          photo: PhotoFormatter(baseurl + "/" + item.image),
+          name: item.name,
+          quantity: item.stock.toString(),
+          article: item.sku,
+          price: item.price.toString(),
+          categorymain: CategoryFormatter(
+            item.mainCategory ? item.mainCategory.name : null,
+            item.subCategory ? item.subCategory.name : null,
+            item.childCategory ? item.childCategory.name : null
+          ),
+          status: StatusFormatter(item.status),
+          actionn: [ActionFormatter(item._id)],
+        });
+        coun++;
+        return "";
       });
-      coun++;
-      return "";
-    });
+    }
   }
 
   const columns = useMemo(

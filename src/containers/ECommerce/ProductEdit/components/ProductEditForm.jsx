@@ -1,40 +1,41 @@
-import React, {useEffect, useState} from "react";
-import PropTypes from "prop-types";
-import {Button, ButtonToolbar} from "reactstrap";
-import {Field, reduxForm} from "redux-form";
+import React, { useEffect, useState } from "react";
+import { Button, ButtonToolbar } from "reactstrap";
+import { Field, reduxForm } from "redux-form";
 import CurrencyUsdIcon from "mdi-react/CurrencyUsdIcon";
 import TagIcon from "mdi-react/TagIcon";
-import {useDispatch, useSelector, connect} from "react-redux";
+import { useDispatch, useSelector, connect } from "react-redux";
 import renderDropZoneMultipleField from "../../../../shared/components/form/DropZoneMultiple";
 import renderSelectField from "../../../../shared/components/form/Select";
-import {getcategorystart} from "../../../../redux/actions/categoryActions";
-import {addproduct, updateProduct} from "../../../../redux/actions/itemActions";
+import { getcategorystart } from "../../../../redux/actions/categoryActions";
+import {
+  updateProduct,
+  updateitem,
+} from "../../../../redux/actions/itemActions";
 import renderDropZoneField from "../../../../shared/components/form/DropZone";
 import CKEditor from "ckeditor4-react";
 import Input from "../../../../shared/components/form/Input";
 import validate from "./validation";
-import {useParams} from "react-router";
+import { useParams } from "react-router";
+import { padding } from "polished";
 
-const ProductAddForm = ({handleSubmit, reset}) => {
-  const {id} = useParams();
+var ProductAddForm = ({ handleSubmit, reset }) => {
+  const { id } = useParams();
   const dispatch = useDispatch();
   let data = [];
-  const {done, catas, listCategory} = useSelector((state) => state.catas);
-  const [fileBase64String, setFileBase64String] = useState("");
+  const { done, catas, listCategory } = useSelector((state) => state.catas);
   const [subCategory, setSubcategory] = useState([]);
   const [childCategory, setChildcategory] = useState([]);
   const [subdata, setSubdata] = useState([]);
   const [showInfo, setShowInfo] = useState("");
   const [showchildInfo, setShowchildInfo] = useState("");
   const [descr, setDescr] = useState("");
-  const [config, setconfig] = useState({loading: false, error: null});
-  const {items} = useSelector((state) => state.items);
+  const [config, setconfig] = useState({ loading: false, error: null });
+  const { items } = useSelector((state) => state.items);
 
   const fitterItem = items.filter((item) => item._id === id)[0];
 
   useEffect(() => {
     if (!listCategory) {
-      alert(listCategory);
       // api call
       dispatch(getcategorystart());
     }
@@ -49,81 +50,80 @@ const ProductAddForm = ({handleSubmit, reset}) => {
   });
   // }
 
-  const encodeFileBase64 = (file) => {
-    var reader = new FileReader();
-    if (file) {
+  const getBase64 = (file) => {
+    return new Promise((resolve) => {
+      let baseURL = "";
+      let reader = new FileReader();
       reader.readAsDataURL(file);
       reader.onload = () => {
-        var Base64 = reader.result;
-
-        setFileBase64String(Base64);
+        baseURL = reader.result;
+        resolve(baseURL.split(";base64,")[1]);
       };
-      reader.onerror = (error) => {};
-    }
+    });
   };
   const onEditorChange = (evt) => {
     setDescr(evt.editor.getData());
   };
   const Productadder = async (data) => {
     // const desc = data.myeditor;
+    console.log(data, "datata hretetetete");
 
-    const file = data.image[0];
-    encodeFileBase64(file);
-    const nd = fileBase64String.split(";base64,");
-    const imagess = nd[1];
-
-    const file2 = data.gallery;
-    const arr2 = [];
-    file2.map((file22) => {
-      encodeFileBase64(file22);
-      const nd = fileBase64String.split(";base64,");
-      arr2.push(nd[1]);
-    });
-
-    if (!imagess == "" && arr2 != []) {
-      const token = localStorage.getItem("token");
-
-      const tosenddata = {
-        name: data.name,
-        shortname: data.shortname,
-        sku: data.sku,
-        price: data.price,
-        mainCategory: data.mainCategory.value,
-        subCategory: data.subCategory ? data.subCategory.value : null,
-        childCategory: data.childCategory ? data.childCategory.value : null,
-        discount: data.discount,
-        stock: parseInt(data.stock),
-        brand: data.brand,
-        image: imagess,
-        gallery: arr2,
-        tags: data.tags,
-        description: descr,
-        publish: false,
-      };
-      try {
-        setconfig({
-          ...config,
-          loading: true,
+    try {
+      setconfig({
+        ...config,
+        loading: true,
+      });
+      Promise.all(data.gallery.map((x) => getBase64(x))).then((list) => {
+        getBase64(data.image[0]).then(async (imageString) => {
+          const token = localStorage.getItem("token");
+          const tosenddata = {
+            name: data.name,
+            shortname: data.shortname,
+            sku: data.sku,
+            price: data.price,
+            mainCategory: data.mainCategory.value,
+            subCategory: data.subCategory ? data.subCategory.value : "",
+            childCategory: data.childCategory ? data.childCategory.value : null,
+            discount: data.discount,
+            stock: parseInt(data.stock),
+            brand: data.brand,
+            image: imageString,
+            gallery: list,
+            tags: data.tags,
+            description: descr,
+            publish: true,
+          };
+          console.log(tosenddata, "datatatatatatatata");
+          const response = await updateProduct(token, tosenddata, id);
+          console.log(response, "response ");
+          console.log();
+          if (response.data.success) {
+            dispatch(updateitem(response.data.data));
+            console.log(response.data, "what is the fuck");
+            setconfig({
+              ...config,
+              loading: false,
+              error: null,
+            });
+            reset();
+          } else {
+            setconfig({
+              ...config,
+              loading: false,
+              error: response.data.message,
+            });
+            console.log(config.error, "whath is");
+          }
         });
-        const response = await updateProduct(token, tosenddata, id);
-        if (response.data.status) {
-          dispatch(updateProduct(response.data));
-        } else {
-          setconfig({
-            ...config,
-            loading: false,
-            error: response.data.message,
-          });
-        }
-        reset();
-      } catch (err) {
-        setconfig({
-          ...config,
+      });
+    } catch (err) {
+      setconfig({
+        ...config,
 
-          loading: false,
-          error: err.toString(),
-        });
-      }
+        loading: false,
+        error: err.toString(),
+      });
+      console.log(config.error, "ehaytjljhdfsi");
     }
   };
   const chkdchild = (data) => {
@@ -167,7 +167,7 @@ const ProductAddForm = ({handleSubmit, reset}) => {
     name,
 
     onChange,
-    meta: {touched, error},
+    meta: { touched, error },
   }) => {
     <>
       <div className="col-md-12">
@@ -192,50 +192,30 @@ const ProductAddForm = ({handleSubmit, reset}) => {
       <div className="form__half">
         <div className="form__form-group">
           <span className="form__form-group-label">Product Name</span>
-          <Field
-            name={"name"}
-            defaultValue={fitterItem.name}
-            component={Input}
-          />
+          <Field name="name" component={Input} />
         </div>
         <div className="form__form-group-id-category">
           <div className="form__form-group form__form-group-id">
             <span className="form__form-group-label">SKU</span>
-            <Field
-              name={"sku"}
-              defaultValue={fitterItem.sku}
-              component={Input}
-            />
+            <Field name={"sku"} component={Input} />
           </div>
           <div className="form__form-group form__form-group-id">
             <span className="form__form-group-label">Short Name</span>
-            <Field
-              name={"shortname"}
-              defaultValue={fitterItem.shortname}
-              component={Input}
-            />
+            <Field name={"shortname"} component={Input} />
           </div>
         </div>
         <div className="form__form-group-price-discount">
           <div className="form__form-group form__form-group-price">
             <span className="form__form-group-label">Price</span>
-            <Field
-              name={"price"}
-              defaultValue={fitterItem.price}
-              component={Input}
-            >
+            <Field name={"price"} component={Input}>
               <div className="form__form-group-icon">
-                <CurrencyUsdIcon />
+                <span style={{ color: "grey" }}>रू</span>
               </div>
             </Field>
           </div>
           <div className="form__form-group">
             <span className="form__form-group-label">Brand</span>
-            <Field
-              name={"brand"}
-              defaultValue={fitterItem.brand}
-              component={Input}
-            />
+            <Field name={"brand"} component={Input} />
           </div>
         </div>
         <div className="form__form-group">
@@ -252,7 +232,7 @@ const ProductAddForm = ({handleSubmit, reset}) => {
         </div>
         <div
           className="form__form-group"
-          style={{display: showInfo === 1 ? "block" : "none"}}
+          style={{ display: showInfo === 1 ? "block" : "none" }}
         >
           <span className="form__form-group-label">Sub Category</span>
           <div className="form__form-group-field">
@@ -268,7 +248,7 @@ const ProductAddForm = ({handleSubmit, reset}) => {
         </div>
         <div
           className="form__form-group"
-          style={{display: showchildInfo === 1 ? "block" : "none"}}
+          style={{ display: showchildInfo === 1 ? "block" : "none" }}
         >
           <span className="form__form-group-label">Child Category</span>
           <div className="form__form-group-field">
@@ -285,17 +265,12 @@ const ProductAddForm = ({handleSubmit, reset}) => {
         <div className="form__form-group-price-discount">
           <div className="form__form-group form__form-group-price">
             <span className="form__form-group-label">Stock</span>
-            <Field
-              name={"stock"}
-              defaultValue={fitterItem.stock}
-              component={Input}
-            />
+            <Field name={"stock"} component={Input} />
           </div>
           <div className="form__form-group">
             <span className="form__form-group-label">Discount</span>
             <Field
               name={"discount"}
-              defaultValue={fitterItem.discount}
               className="form__form-group-price"
               component={Input}
             >
@@ -310,21 +285,16 @@ const ProductAddForm = ({handleSubmit, reset}) => {
           <span className="form__form-group-label">Tags</span>
           <Field
             name={"tags"}
-            defaultValue={fitterItem.tags}
             className="form__form-group-price"
             component={Input}
           />
         </div>
       </div>
       <div className="form__half">
-        <div className="form__form-group" style={{height: "10%"}}>
+        <div className="form__form-group" style={{ height: "10%" }}>
           <span className="form__form-group-label">Image</span>
           <div className="form__form-group-field">
-            <Field
-              name="image"
-              defaultValue={fitterItem.image}
-              component={renderDropZoneField}
-            />
+            <Field name="image" component={renderDropZoneField} />
           </div>
         </div>
       </div>
@@ -332,11 +302,7 @@ const ProductAddForm = ({handleSubmit, reset}) => {
         <div className="form__form-group">
           <span className="form__form-group-label">Description</span>
 
-          <CKEditor
-            name="myeditor"
-            defaultValue={fitterItem.description}
-            onChange={onEditorChange}
-          />
+          <CKEditor name="myeditor" onChange={onEditorChange} />
           {!descr && (
             <span className="form__form-group-error">
               Description is required
@@ -350,7 +316,7 @@ const ProductAddForm = ({handleSubmit, reset}) => {
           <div className="form__form-group-field">
             <Field
               name="gallery"
-              defaultValue={fitterItem.gallery}
+              // defaultValue={fitterItem.gallery}
               component={renderDropZoneMultipleField}
             />
           </div>
@@ -375,9 +341,27 @@ const ProductAddForm = ({handleSubmit, reset}) => {
   );
 };
 
-export default connect()(
-  reduxForm({
-    form: "product_add_form", // a unique identifier for this form
-    validate: validate,
-  })(ProductAddForm)
-);
+// ProductAddForm = connect(mapStateToProps)(ProductAddForm);
+ProductAddForm = reduxForm({
+  form: "product_edit_form", // a unique identifier for this form
+  validate: validate,
+})(ProductAddForm);
+
+// ProductAddForm = connect((state) => {
+//   // const { id } = useParams();
+
+//   console.log(state);
+//   return {
+//     initialValues: state.items.items.filter((item) => item._id === id)[0],
+//   };
+// })(ProductAddForm);
+// export default connect((state) => ({
+//   initialValues: state.account.data, // pull initial values from account reducer
+// }))(
+//   reduxForm({
+//     form: "product_add_form", // a unique identifier for this form
+//     validate: validate,
+//   })(ProductAddForm)
+// );
+
+export default ProductAddForm;

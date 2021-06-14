@@ -1,6 +1,6 @@
-import React from 'react';
-import { Card, CardBody, Col } from 'reactstrap';
-import ProductAddForm from './ProductAddForm';
+import React from "react";
+import {Card, CardBody, Col} from "reactstrap";
+import ProductAddForm from "./ProductAddForm";
 
 const PaymentCard = () => (
   <Col md={12} lg={12}>

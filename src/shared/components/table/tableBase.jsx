@@ -1,6 +1,6 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
-import {Card, CardBody, Col} from "reactstrap";
+import { Card, CardBody, Col } from "reactstrap";
 import ReactTableBase from "./ReactTableBase";
 import ReactTableCustomizer from "./reactTableCustomizer";
 
@@ -12,7 +12,7 @@ const reorder = (rows, startIndex, endIndex) => {
   return result;
 };
 
-const DataReactTable = ({listTableData}) => {
+const DataReactTable = ({ listTableData }) => {
   const [rows, setData] = useState(listTableData.tableRowsData);
   const [isEditable, setIsEditable] = useState(false);
   const [isResizable, setIsResizable] = useState(false);
@@ -87,7 +87,7 @@ const DataReactTable = ({listTableData}) => {
         <CardBody>
           <div className="react-table__wrapper">
             <div></div>
-            <ReactTableCustomizer
+            {/* <ReactTableCustomizer
               handleClickIsEditable={handleClickIsEditable}
               handleClickIsResizable={handleClickIsResizable}
               handleClickIsSortable={handleClickIsSortable}
@@ -104,7 +104,7 @@ const DataReactTable = ({listTableData}) => {
               withPagination={withPagination}
               withSearchEngine={withSearchEngine}
               fullCustomizer
-            />
+            /> */}
           </div>
           <ReactTableBase
             key={

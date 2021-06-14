@@ -18,7 +18,7 @@ const SidebarContent = ({ onClick, sidebarCollapse }) => {
         <SidebarLink
           title="Dashboard"
           icon="store"
-          route="/e_commerce_dashboard"
+          route="/"
           onClick={hideSidebar}
         />
       </ul>

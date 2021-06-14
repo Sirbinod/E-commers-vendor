@@ -1,13 +1,12 @@
-import React, { useState } from "react";
-import { Card, CardBody, Col } from "reactstrap";
+import React, {useState} from "react";
+import {Card, CardBody, Col} from "reactstrap";
 import ProductGallery from "./ProductGallery";
 import ProductTabs from "./ProductTabs";
 import ColorSelect from "./ColorSelect";
-import { baseurl } from "../../../../utils/baseApi/baseapi";
+import {baseurl} from "../../../../utils/baseApi/baseapi";
 
 const ProductCard = (item) => {
   const [color, setColor] = useState("white");
-  console.log(item.items);
   const onLike = () => {
     if (color === "white") {
       setColor("#70bbfd");
@@ -18,7 +17,7 @@ const ProductCard = (item) => {
   const imggallery = [];
   item.items.gallery.map((gallimg) => {
     imggallery.push({
-      src: baseurl + gallimg,
+      src: baseurl + "/" + gallimg,
     });
   });
   let price2 = 0;
@@ -31,10 +30,7 @@ const ProductCard = (item) => {
 
     //   // })
     nessItems = tarr.map((item) => (
-      <badge
-        class="badge badge-primary badge-md"
-        style={{ marginLeft: ".5rem" }}
-      >
+      <badge class="badge badge-primary badge-md" style={{marginLeft: ".5rem"}}>
         {item}
       </badge>
     ));
@@ -55,14 +51,7 @@ const ProductCard = (item) => {
             <div className="product-card__info">
               <h3 className="product-card__title">{item.items.name}</h3>
               <h5>{item.items.shortname}</h5>
-              {/* <div className="product-card__rate">
-                <StarIcon />
-                <StarIcon />
-                <StarIcon />
-                <StarIcon />
-                <StarOutlineIcon />
-                <a className="product-card__link" href="/easydev/e-commerce/product_page">See all reviews</a>
-              </div> */}
+
               <h1 className="product-card__price">
                 Rs.{price2}{" "}
                 <span className="product-card__old-price">

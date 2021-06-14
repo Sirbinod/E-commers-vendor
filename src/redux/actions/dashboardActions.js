@@ -1,5 +1,5 @@
 import axios from "axios";
-import {dashboardapi} from "../../utils/baseApi/baseapi";
+import { dashboardapi } from "../../utils/baseApi/baseapi";
 
 export const SDATAS_START = "SDATAS_START";
 export const LOAD_NEW_DATAS = "LOAD_NEW_DATAS";
@@ -22,9 +22,10 @@ export const getdatasstart = (token) => (dispatch) => {
   axios({
     method: "get",
     url: dashboardapi,
-    headers: {Authorization: "Bearer " + token},
+    headers: { Authorization: "Bearer " + token },
   })
     .then(function (response) {
+      console.log(response.data);
       dispatch(loaddatas(response.data.data));
     })
     .catch(function (error) {

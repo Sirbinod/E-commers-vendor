@@ -30,6 +30,9 @@ const validation = (values) => {
     console.log(values.descripiton);
     errors["descripiton"] = "description is required";
   }
+  if (!values.image) {
+    errors["image"] = "Image is required";
+  }
   return errors;
 };
 

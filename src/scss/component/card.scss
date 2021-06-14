@@ -9,20 +9,46 @@
     height: auto;
   }
 }
+.image {
+  margin: 0.5em 3em 0.5em 5em;
+  height: 20rem;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+}
+.imgg {
+  height: 100%;
+}
+.profile-detail {
+  padding-top: 5em;
+}
+.name {
+  font-size: 1.3rem;
+  font-weight: bold;
+}
+.other-detail {
+  font-size: 1rem;
+  font-weight: bold;
+}
+.name-datail {
+  color: rgb(131, 131, 134);
+}
+.modalInput {
+  width: 100%;
+  height: 2.5em;
+}
 
 .card-body {
   height: 100%;
 
   @include themify($themes) {
-    background-color: themed('colorBackground');
+    background-color: themed("colorBackground");
   }
 
   @include borderify($borders) {
-    border-radius: bordered('borderRadius');
+    border-radius: bordered("borderRadius");
   }
 
   @include shadowify($shadows) {
-    box-shadow: shadowed('blocksShadows');
+    box-shadow: shadowed("blocksShadows");
   }
 }
 
@@ -32,7 +58,7 @@
   position: relative;
 
   @include directify($directions) {
-    text-align: directed('left');
+    text-align: directed("left");
   }
 
   h5.card__title-center {
@@ -61,7 +87,6 @@
 }
 
 .blocks-with-shadow-theme {
-
   .card-body {
     box-shadow: 0 10px 30px 1px rgba(0, 0, 0, 0.06);
   }

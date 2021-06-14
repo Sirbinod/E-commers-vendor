@@ -1,8 +1,10 @@
 import axios from "axios";
-import {loginapi} from "../../utils/baseApi/baseapi";
+
+import {loginapi, passwordchangeapi} from "../../utils/baseApi/baseapi";
 export const LOGGEDIN = "LOGGEDIN";
 export const LOGIN_ERROR_AUTH = "LOGIN_ERROR_AUTH";
 export const LOGIN_START = "LOGIN_START";
+export const PROFILE_FETCH = "PROFILE_FETCH";
 
 // start
 // sucess
