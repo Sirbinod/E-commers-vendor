@@ -53,7 +53,7 @@ const ProfileCard = (props) => {
         passwordchangeapi,
         {oldPassword, newPassword, confirmNewPassword},
         {
-          headrs: {
+          headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },

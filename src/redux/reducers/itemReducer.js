@@ -25,7 +25,6 @@ const itemReducer = (state = initialState, action) => {
       return updateobject(state, {
         loading: true,
         listItems: true,
-        items: [],
       });
     case LOAD_NEW_ITEMS:
       if (state.done === false) {

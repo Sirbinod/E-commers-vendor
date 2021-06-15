@@ -15,7 +15,13 @@ export const UPDATE_NEW_ITEMS = "UPDATE_NEW_ITEMS";
 export const DELETE_NEW_ITEMS = "DELETE_NEW_ITEMS";
 export const DELETE_SUCCEESS = "DELETE_SUCCESS";
 export const ADD_PRODUCT = "ADD_PRODUCT";
+export const ITEM_FETCH_START = "ITEM_FETCH_START";
 
+const itemFetchStart = () => {
+  return {
+    type: ITEM_FETCH_START,
+  };
+};
 const itemchkStart = () => {
   return {
     type: SITEM_START,
@@ -58,6 +64,7 @@ export const deleteSuccess = (id) => {
 };
 
 export const getme = (token) => (dispatch) => {
+  // dispatch()
   dispatch(itemchkStart());
 
   axios({

@@ -1,36 +1,33 @@
-import React, { useEffect, useState } from "react";
-import { Button, ButtonToolbar } from "reactstrap";
-import { Field, reduxForm } from "redux-form";
+import React, {useEffect, useState} from "react";
+import {Button, ButtonToolbar} from "reactstrap";
+import {Field, reduxForm} from "redux-form";
 import CurrencyUsdIcon from "mdi-react/CurrencyUsdIcon";
 import TagIcon from "mdi-react/TagIcon";
-import { useDispatch, useSelector, connect } from "react-redux";
+import {useDispatch, useSelector, connect} from "react-redux";
 import renderDropZoneMultipleField from "../../../../shared/components/form/DropZoneMultiple";
 import renderSelectField from "../../../../shared/components/form/Select";
-import { getcategorystart } from "../../../../redux/actions/categoryActions";
-import {
-  updateProduct,
-  updateitem,
-} from "../../../../redux/actions/itemActions";
+import {getcategorystart} from "../../../../redux/actions/categoryActions";
+import {updateProduct, updateitem} from "../../../../redux/actions/itemActions";
 import renderDropZoneField from "../../../../shared/components/form/DropZone";
 import CKEditor from "ckeditor4-react";
 import Input from "../../../../shared/components/form/Input";
 import validate from "./validation";
-import { useParams } from "react-router";
-import { padding } from "polished";
+import {useParams} from "react-router";
+import {padding} from "polished";
 
-var ProductAddForm = ({ handleSubmit, reset }) => {
-  const { id } = useParams();
+var ProductAddForm = ({handleSubmit, reset}) => {
+  const {id} = useParams();
   const dispatch = useDispatch();
   let data = [];
-  const { done, catas, listCategory } = useSelector((state) => state.catas);
+  const {done, catas, listCategory} = useSelector((state) => state.catas);
   const [subCategory, setSubcategory] = useState([]);
   const [childCategory, setChildcategory] = useState([]);
   const [subdata, setSubdata] = useState([]);
   const [showInfo, setShowInfo] = useState("");
   const [showchildInfo, setShowchildInfo] = useState("");
   const [descr, setDescr] = useState("");
-  const [config, setconfig] = useState({ loading: false, error: null });
-  const { items } = useSelector((state) => state.items);
+  const [config, setconfig] = useState({loading: false, error: null});
+  const {items} = useSelector((state) => state.items);
 
   const fitterItem = items.filter((item) => item._id === id)[0];
 
@@ -93,13 +90,13 @@ var ProductAddForm = ({ handleSubmit, reset }) => {
             description: descr,
             publish: true,
           };
-          console.log(tosenddata, "datatatatatatatata");
+
           const response = await updateProduct(token, tosenddata, id);
-          console.log(response, "response ");
+
           console.log();
           if (response.data.success) {
             dispatch(updateitem(response.data.data));
-            console.log(response.data, "what is the fuck");
+
             setconfig({
               ...config,
               loading: false,
@@ -123,7 +120,6 @@ var ProductAddForm = ({ handleSubmit, reset }) => {
         loading: false,
         error: err.toString(),
       });
-      console.log(config.error, "ehaytjljhdfsi");
     }
   };
   const chkdchild = (data) => {
@@ -167,7 +163,7 @@ var ProductAddForm = ({ handleSubmit, reset }) => {
     name,
 
     onChange,
-    meta: { touched, error },
+    meta: {touched, error},
   }) => {
     <>
       <div className="col-md-12">
@@ -209,7 +205,7 @@ var ProductAddForm = ({ handleSubmit, reset }) => {
             <span className="form__form-group-label">Price</span>
             <Field name={"price"} component={Input}>
               <div className="form__form-group-icon">
-                <span style={{ color: "grey" }}>रू</span>
+                <span style={{color: "grey"}}>रू</span>
               </div>
             </Field>
           </div>
@@ -232,7 +228,7 @@ var ProductAddForm = ({ handleSubmit, reset }) => {
         </div>
         <div
           className="form__form-group"
-          style={{ display: showInfo === 1 ? "block" : "none" }}
+          style={{display: showInfo === 1 ? "block" : "none"}}
         >
           <span className="form__form-group-label">Sub Category</span>
           <div className="form__form-group-field">
@@ -248,7 +244,7 @@ var ProductAddForm = ({ handleSubmit, reset }) => {
         </div>
         <div
           className="form__form-group"
-          style={{ display: showchildInfo === 1 ? "block" : "none" }}
+          style={{display: showchildInfo === 1 ? "block" : "none"}}
         >
           <span className="form__form-group-label">Child Category</span>
           <div className="form__form-group-field">
@@ -291,7 +287,7 @@ var ProductAddForm = ({ handleSubmit, reset }) => {
         </div>
       </div>
       <div className="form__half">
-        <div className="form__form-group" style={{ height: "10%" }}>
+        <div className="form__form-group" style={{height: "10%"}}>
           <span className="form__form-group-label">Image</span>
           <div className="form__form-group-field">
             <Field name="image" component={renderDropZoneField} />

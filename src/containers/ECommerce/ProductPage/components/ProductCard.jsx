@@ -15,7 +15,7 @@ const ProductCard = (item) => {
     }
   };
   const imggallery = [];
-  item.items.gallery.map((gallimg) => {
+  item.items.gallery.forEach((gallimg) => {
     imggallery.push({
       src: baseurl + "/" + gallimg,
     });

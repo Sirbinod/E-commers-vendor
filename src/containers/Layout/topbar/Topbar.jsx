@@ -16,7 +16,10 @@ const Topbar = ({
         changeMobileSidebarVisibility={changeMobileSidebarVisibility}
         changeSidebarVisibility={changeSidebarVisibility}
       />
-      <Link className="topbar__logo" to="/e_commerce_dashboard" />
+      {/* <Link className="topbar__logo" to="/" ></Link> logo  */}
+      <Link className="mt-3 font-weight-bold h3" to="/">
+        Cloud Pasal
+      </Link>
     </div>
     <div className="topbar__right">
       <div className="topbar__right-over">
